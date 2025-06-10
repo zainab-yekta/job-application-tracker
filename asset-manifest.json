@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/job-application-tracker/static/css/main.2a0d8633.css",
-    "main.js": "/job-application-tracker/static/js/main.ee89d0c1.js",
+    "main.js": "/job-application-tracker/static/js/main.1a0fffd3.js",
     "static/js/239.495964cf.chunk.js": "/job-application-tracker/static/js/239.495964cf.chunk.js",
     "static/js/213.e24c35cb.chunk.js": "/job-application-tracker/static/js/213.e24c35cb.chunk.js",
     "static/js/455.36efd377.chunk.js": "/job-application-tracker/static/js/455.36efd377.chunk.js",
     "index.html": "/job-application-tracker/index.html",
     "main.2a0d8633.css.map": "/job-application-tracker/static/css/main.2a0d8633.css.map",
-    "main.ee89d0c1.js.map": "/job-application-tracker/static/js/main.ee89d0c1.js.map",
+    "main.1a0fffd3.js.map": "/job-application-tracker/static/js/main.1a0fffd3.js.map",
     "239.495964cf.chunk.js.map": "/job-application-tracker/static/js/239.495964cf.chunk.js.map",
     "213.e24c35cb.chunk.js.map": "/job-application-tracker/static/js/213.e24c35cb.chunk.js.map",
     "455.36efd377.chunk.js.map": "/job-application-tracker/static/js/455.36efd377.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2a0d8633.css",
-    "static/js/main.ee89d0c1.js"
+    "static/js/main.1a0fffd3.js"
   ]
 }
