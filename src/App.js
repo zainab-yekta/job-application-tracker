@@ -126,7 +126,7 @@ function App() {
     />
 
     {/* Catch-all for non-logged-in users */}
-    {!isLoggedIn && <Route path="*" element={<Navigate to="/login" />} />}
+{/*{!isLoggedIn && <Route path="*" element={<Navigate to="/login" />} />}*/}
   </Routes>
 
   {/* ✅ Place Chatbot outside Routes */}
