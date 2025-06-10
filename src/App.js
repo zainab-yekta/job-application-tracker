@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+//import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
@@ -80,58 +81,57 @@ function App() {
   return (
   <div>
     {showCongrats && (
-  <div className="congrats-popup2">
-    <p>{congratsMessage}</p>
-    {showAcceptButtons ? (
-      <div>
-        <button onClick={() => setShowCongrats(false)}>Keep It</button>
-        <button onClick={() => setShowCongrats(false)}>Delete All</button>
+      <div className="congrats-popup2">
+        <p>{congratsMessage}</p>
+        {showAcceptButtons ? (
+        <div>
+          <button onClick={() => setShowCongrats(false)}>Keep It</button>
+          <button onClick={() => setShowCongrats(false)}>Delete All</button>
+        </div>
+        ) : (
+          <button onClick={() => setShowCongrats(false)}>Dismiss</button>
+        )}
       </div>
-    ) : (
-      <button onClick={() => setShowCongrats(false)}>Dismiss</button>
     )}
-  </div>
-)}
     <Router>
-  <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-  
-  <Routes>
-    {/* Public Routes */}
-    <Route path="/" element={<Home />} />
-    <Route path="/about" element={<About />} />
-    <Route path="/login" element={<Login onLogin={handleLogin} />} />
-    <Route path="/register" element={<Register />} />
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/register" element={<Register />} />
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Dashboard
+                jobs={jobs}
+                onAdd={addJob}
+                onDelete={deleteJob}
+                onUpdate={updateJob}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Analytics jobs={jobs} />
+            </ProtectedRoute>
+          }
+        />
 
-    {/* Protected Routes */}
-    <Route
-      path="/dashboard"
-      element={
-        <ProtectedRoute isLoggedIn={isLoggedIn}>
-          <Dashboard
-            jobs={jobs}
-            onAdd={addJob}
-            onDelete={deleteJob}
-            onUpdate={updateJob}
-          />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/analytics"
-      element={
-        <ProtectedRoute isLoggedIn={isLoggedIn}>
-          <Analytics jobs={jobs} />
-        </ProtectedRoute>
-      }
-    />
+        {/* Catch-all for non-logged-in users */}
+        {/*{!isLoggedIn && <Route path="*" element={<Navigate to="/login" />} />}*/}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
 
-    {/* Catch-all for non-logged-in users */}
-{/*{!isLoggedIn && <Route path="*" element={<Navigate to="/login" />} />}*/}
-  </Routes>
-
-  {/* ✅ Place Chatbot outside Routes */}
-  <Chatbot />
-</Router>
+      {/* Place Chatbot outside Routes */}
+      <Chatbot />
+    </Router>
   </div>
 );
 }

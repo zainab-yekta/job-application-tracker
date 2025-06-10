@@ -1,6 +1,30 @@
 ## Job Application Tracker (React.js Project)
 A simple and effective web-based tool built with React.js that helps users track job applications, interviews, and rejections, while providing options for filtering, searching, exporting, and receiving interview notifications.
 
+## Live Demo & Repository (How to Run This Project)
+- **Live Site**: [Job Application Tracker (GitHub Pages)](https://zainab-yekta.github.io/job-application-tracker/)
+- **GitHub Repo**: [View Source Code on GitHub](https://github.com/zainab-yekta/job-application-tracker)
+
+## Updating the Project
+After making any changes to the project files, follow these steps to update your GitHub repository and the deployed GitHub Pages site:
+
+git add .
+git commit -m "Describe your change here"
+git push origin main
+
+Once you push the changes to GitHub, GitHub Pages will automatically update your live site within a few seconds. This ensures that:
+- Your repository stays up to date with the latest code.
+- Your live deployed site reflects the most recent changes.
+
+### Install dependencies
+npm install uuid dayjs jspdf jspdf-autotable exceljs file-saver classnames
+Plus the standard React packages that come with create-react-app.
+
+## Start the development 
+cd job-application-tracker
+   npm install
+   npm start
+   
 ## Tech Stack
 - Frontend: React.js
 - Styling: Custom CSS (no external frameworks like Tailwind or Bootstrap used)
@@ -99,21 +123,6 @@ src/
 ├── index.js
 └── index.css
 
-### Install dependencies
-npm install uuid dayjs jspdf jspdf-autotable exceljs file-saver classnames
-Plus the standard React packages that come with create-react-app.
-
-## Start the development server
-npm start
-
-## How to Run This Project
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/job-application-tracker.git
-   cd job-application-tracker
-   npm install
-   npm start
-
 ## Future Improvements (Planned)
 - Add Login/Register authentication system
 - Integrate persistent storage (localStorage or backend + database integration for cloud sync)
@@ -123,10 +132,9 @@ npm start
 The base setup uses create-react-app, which supports PWA out of the box. You can enable it by modifying the serviceWorkerRegistration.js.
 
 ### Deployment
-Deploying this app using:
-GitHub Pages
-Firebase Hosting
-(Deployment guide coming soon...)
+This app is deployed using:
+- GitHub Pages — View Live Site
+- Firebase Hosting — (Coming soon...)
 
 ## Notes
 This project does not use a database. All data is stored in local component state and resets on refresh.
@@ -134,6 +142,10 @@ The authentication system is for demonstration only. It does not persist or vali
 
 ## 📄 License
 This project is for educational and portfolio purposes. Project built to practice frontend development and job application management logic using React.
+This project is licensed under the MIT License, which means:
+ - You can use, copy, modify, and share it freely.
+ - Just keep the copyright.
+ - No warranty is provided.
 
 ## Author
 Zeinab Ramezani Yekta
