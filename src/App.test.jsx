@@ -10,7 +10,7 @@ const openAt = (hash) => {
 };
 
 const register = async (user, email, password) => {
-  await user.click(within(screen.getByRole('navigation')).getByRole('link', { name: 'Register' }));
+  await user.click(within(screen.getByRole('navigation')).getByRole('link', { name: 'Sign up' }));
   await user.type(screen.getByLabelText('Email'), email);
   await user.type(screen.getByLabelText('Password'), password);
   await user.type(screen.getByLabelText('Confirm password'), password);
@@ -57,7 +57,7 @@ describe('App', () => {
     await addJob(user, 'First User Job');
     expect(screen.getByText('First User Job')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'Logout' }));
+    await user.click(screen.getByRole('button', { name: 'Log out' }));
     await register(user, 'second@example.com', 'secret2');
     await login(user, 'secret2');
     expect(screen.queryByText('First User Job')).not.toBeInTheDocument();
@@ -69,9 +69,7 @@ describe('App', () => {
     openAt('#/');
     await register(user, 'me@example.com', 'secret1');
 
-    await user.click(
-      within(screen.getByRole('navigation')).getByRole('link', { name: 'Register' }),
-    );
+    await user.click(within(screen.getByRole('navigation')).getByRole('link', { name: 'Sign up' }));
     await user.type(screen.getByLabelText('Email'), 'ME@example.com');
     await user.type(screen.getByLabelText('Password'), 'another1');
     await user.type(screen.getByLabelText('Confirm password'), 'another1');

@@ -1,0 +1,100 @@
+/* Design tokens. Components use these variables instead of raw colors, so the
+   whole app can be re-themed (including dark mode) from this one file.
+   Every text/background pair below meets WCAG AA contrast (4.5:1). */
+:root {
+  /* Brand */
+  --color-primary: #0369a1;
+  --color-primary-hover: #075985;
+  --color-primary-soft: #e0f2fe;
+  --color-on-primary: #ffffff;
+  --color-accent: #15803d;
+  --color-accent-hover: #166534;
+  --color-on-accent: #ffffff;
+
+  /* Surfaces and text */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f5f9;
+  --color-fg: #0f172a;
+  --color-fg-muted: #475569;
+  --color-fg-subtle: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-ring: #0369a1;
+
+  /* Feedback */
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-success: #15803d;
+  --color-success-soft: #f0fdf4;
+  --color-warning-fg: #78350f;
+  --color-warning-soft: #fffbeb;
+  --color-warning-border: #fcd34d;
+
+  /* Application statuses (badge text / badge background) */
+  --status-applied-fg: #075985;
+  --status-applied-bg: #e0f2fe;
+  --status-interview-fg: #92400e;
+  --status-interview-bg: #fef3c7;
+  --status-rejected-fg: #991b1b;
+  --status-rejected-bg: #fee2e2;
+  --status-offer-fg: #166534;
+  --status-offer-bg: #dcfce7;
+  --status-accepted-fg: #5b21b6;
+  --status-accepted-bg: #ede9fe;
+
+  /* Chart series (also used for the matching legend dots) */
+  --chart-1: #0369a1;
+  --chart-2: #d97706;
+  --chart-3: #dc2626;
+  --chart-4: #15803d;
+  --chart-5: #7c3aed;
+  --chart-grid: #e2e8f0;
+  --chart-axis: #64748b;
+
+  /* Typography */
+  --font-sans:
+    'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+
+  /* Spacing (4px grid) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Shape and depth. The style is flat: borders instead of shadows, with a
+     shadow only on things that float above the page. */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+  --shadow-overlay: 0 12px 32px rgba(15, 23, 42, 0.16);
+
+  /* Layout */
+  --container-width: 1200px;
+  --navbar-height: 64px;
+  --touch-target: 44px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: light;
+}

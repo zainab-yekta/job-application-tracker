@@ -1,24 +1,31 @@
-/* General Body Styling */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #4f7cbe;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-h1 {
+/* Styles for pages that have not moved to the design system yet. Global
+   element rules are scoped to those pages so they do not leak into new ones. */
+:where(
+    .app-container,
+    .auth-container,
+    .home-container,
+    .about-page,
+    .analytics-page,
+    .status-page,
+    .congrats-popup2
+  )
+  h1 {
   text-align: center;
   padding-top: 1rem;
   margin-top: 20px;
   color: #333;
 }
 
-/* Form Styling */
-form {
+:where(
+    .app-container,
+    .auth-container,
+    .home-container,
+    .about-page,
+    .analytics-page,
+    .status-page,
+    .congrats-popup2
+  )
+  form {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -28,9 +35,16 @@ form {
   max-width: 500px;
 }
 
-input,
-select,
-button {
+:where(
+    .app-container,
+    .auth-container,
+    .home-container,
+    .about-page,
+    .analytics-page,
+    .status-page,
+    .congrats-popup2
+  )
+  :is(input, select, button) {
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -41,8 +55,8 @@ button {
   align-items: flex-end;
 }
 
-/* Small caption above a form control */
-.field {
+/* Small caption above a form control (old job form only) */
+.job-form .field {
   display: inline-flex;
   flex-direction: column;
   gap: 4px;
@@ -155,8 +169,16 @@ input[aria-invalid='true'] {
   margin-top: 0.5rem;
 }
 
-/* Buttons */
-button {
+:where(
+    .app-container,
+    .auth-container,
+    .home-container,
+    .about-page,
+    .analytics-page,
+    .status-page,
+    .congrats-popup2
+  )
+  button {
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   border: none;
@@ -166,7 +188,16 @@ button {
   transition: background-color 0.2s;
 }
 
-button:hover {
+:where(
+    .app-container,
+    .auth-container,
+    .home-container,
+    .about-page,
+    .analytics-page,
+    .status-page,
+    .congrats-popup2
+  )
+  button:hover {
   background-color: #0056b3;
 }
 
@@ -224,7 +255,16 @@ button.delete:hover {
 
 /* Responsive Layout */
 @media (max-width: 600px) {
-  form {
+  :where(
+      .app-container,
+      .auth-container,
+      .home-container,
+      .about-page,
+      .analytics-page,
+      .status-page,
+      .congrats-popup2
+    )
+    form {
     flex-direction: column;
     align-items: center;
   }
@@ -234,9 +274,16 @@ button.delete:hover {
     align-items: center;
   }
 
-  input,
-  select,
-  button {
+  :where(
+      .app-container,
+      .auth-container,
+      .home-container,
+      .about-page,
+      .analytics-page,
+      .status-page,
+      .congrats-popup2
+    )
+    :is(input, select, button) {
     width: 90%;
   }
 
@@ -488,19 +535,6 @@ button.delete:hover {
 
 .home-links a:hover {
   text-decoration: underline;
-}
-
-body,
-html {
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-#root {
-  min-height: 100vh;
-  background-color: #f0f2f5;
 }
 
 /* Page and section styles (moved from inline styles) */
