@@ -22,14 +22,14 @@ const login = async (user, password) => {
   // The email is filled in after registering
   await user.type(screen.getByLabelText('Password'), password);
   await user.click(screen.getByRole('button', { name: 'Log in' }));
-  await screen.findByRole('heading', { name: 'Job Application Tracker' });
+  await screen.findByRole('heading', { name: 'Your applications' });
 };
 
 const addJob = async (user, title) => {
   await user.type(screen.getByLabelText('Job title'), title);
   await user.type(screen.getByLabelText('Company'), 'Acme');
   await user.type(screen.getByLabelText('Applied on'), '2026-05-01');
-  await user.click(screen.getByRole('button', { name: 'Add Job' }));
+  await user.click(screen.getByRole('button', { name: 'Add application' }));
 };
 
 describe('App', () => {
@@ -61,7 +61,7 @@ describe('App', () => {
     await register(user, 'second@example.com', 'secret2');
     await login(user, 'secret2');
     expect(screen.queryByText('First User Job')).not.toBeInTheDocument();
-    expect(screen.getByText('No job applications added yet.')).toBeInTheDocument();
+    expect(screen.getByText('No applications yet')).toBeInTheDocument();
   });
 
   it('refuses a second account with the same email', async () => {
@@ -98,7 +98,7 @@ describe('App', () => {
     await user.type(screen.getByLabelText('Email'), 'old@example.com');
     await user.type(screen.getByLabelText('Password'), 'oldpass');
     await user.click(screen.getByRole('button', { name: 'Log in' }));
-    await screen.findByRole('heading', { name: 'Job Application Tracker' });
+    await screen.findByRole('heading', { name: 'Your applications' });
 
     const account = JSON.parse(localStorage.getItem('jobTracker.users'))['old@example.com'];
     expect(account.passwordHash).toMatch(/^[0-9a-f]{64}$/);

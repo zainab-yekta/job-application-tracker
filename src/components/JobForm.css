@@ -1,0 +1,27 @@
+.job-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Two short fields side by side (dates, status, time) */
+.job-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.field-label.is-required::after {
+  content: ' *';
+  color: var(--color-danger);
+}
+
+.job-form-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.job-form-actions .btn-primary {
+  flex: 1;
+}

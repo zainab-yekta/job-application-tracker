@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { AlertCircle, CheckCircle2, Download, Upload } from 'lucide-react';
 import { downloadBackup, parseBackup, MAX_BACKUP_BYTES } from '../utils/backup';
 
 // Download all applications as a JSON file, or load them back from one
@@ -41,12 +42,25 @@ function BackupControls({ jobs, onImport }) {
 
   return (
     <div className="backup-controls">
-      <button type="button" onClick={() => downloadBackup(jobs)} disabled={jobs.length === 0}>
-        Download backup
-      </button>
-      <button type="button" onClick={() => fileInput.current?.click()}>
-        Restore backup
-      </button>
+      <div className="tool-buttons">
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => downloadBackup(jobs)}
+          disabled={jobs.length === 0}
+        >
+          <Download size={16} aria-hidden="true" />
+          Download backup
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => fileInput.current?.click()}
+        >
+          <Upload size={16} aria-hidden="true" />
+          Restore backup
+        </button>
+      </div>
       <input
         ref={fileInput}
         type="file"
@@ -58,9 +72,14 @@ function BackupControls({ jobs, onImport }) {
       />
       {message && (
         <p
-          className={message.type === 'error' ? 'form-errors' : 'backup-success'}
+          className={`alert ${message.type === 'error' ? 'alert-error' : 'alert-success'}`}
           role={message.type === 'error' ? 'alert' : 'status'}
         >
+          {message.type === 'error' ? (
+            <AlertCircle size={18} aria-hidden="true" />
+          ) : (
+            <CheckCircle2 size={18} aria-hidden="true" />
+          )}
           {message.text}
         </p>
       )}

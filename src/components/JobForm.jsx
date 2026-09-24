@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Plus, Save } from 'lucide-react';
 import { STATUSES } from '../constants/statuses';
 import { validateJob } from '../utils/validateJob';
+import './JobForm.css';
 
 const EMPTY_FORM = {
   title: '',
@@ -25,6 +27,23 @@ const toFormValues = (job) =>
       }
     : EMPTY_FORM;
 
+// One labelled field with its error message directly underneath
+function Field({ id, label, required, error, children }) {
+  return (
+    <div className="field">
+      <label className={`field-label${required ? ' is-required' : ''}`} htmlFor={id}>
+        {label}
+      </label>
+      {children}
+      {error && (
+        <span id={`${id}-error`} className="field-error">
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+
 // The parent gives this form a `key` based on the job being edited,
 // so React creates a fresh form whenever editing starts or ends.
 function JobForm({ jobToEdit, onSubmit, onCancel }) {
@@ -41,6 +60,9 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
     const found = validateJob(form);
     if (Object.keys(found).length > 0) {
       setErrors(found);
+      // Move to the first field that needs fixing
+      const first = Object.keys(EMPTY_FORM).find((field) => found[field]);
+      e.currentTarget.querySelector(`[name="${first}"]`)?.focus();
       return;
     }
 
@@ -60,99 +82,94 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
     setErrors({});
   };
 
-  const errorMessages = Object.values(errors).filter(Boolean);
+  // Props shared by every input: name, value, change handler and error wiring
+  const inputProps = (field) => ({
+    id: `job-${field}`,
+    name: field,
+    className: 'input',
+    value: form[field],
+    onChange: handleChange(field),
+    'aria-invalid': Boolean(errors[field]),
+    'aria-describedby': errors[field] ? `job-${field}-error` : undefined,
+  });
 
   return (
     <form onSubmit={handleSubmit} className="job-form" noValidate>
-      <label className="sr-only" htmlFor="job-title">
-        Job title
-      </label>
-      <input
-        id="job-title"
-        type="text"
-        placeholder="Job Title"
-        value={form.title}
-        onChange={handleChange('title')}
-        aria-invalid={Boolean(errors.title)}
-      />
-      <label className="sr-only" htmlFor="job-company">
-        Company
-      </label>
-      <input
-        id="job-company"
-        type="text"
-        placeholder="Company"
-        value={form.company}
-        onChange={handleChange('company')}
-        aria-invalid={Boolean(errors.company)}
-      />
-      <label className="sr-only" htmlFor="job-location">
-        Location
-      </label>
-      <input
-        id="job-location"
-        type="text"
-        placeholder="Location"
-        value={form.location}
-        onChange={handleChange('location')}
-      />
-      <div className="field">
-        <label htmlFor="job-applied">Applied on</label>
+      <Field id="job-title" label="Job title" required error={errors.title}>
         <input
-          id="job-applied"
-          type="date"
-          value={form.appliedDate}
-          onChange={handleChange('appliedDate')}
-          aria-invalid={Boolean(errors.appliedDate)}
+          {...inputProps('title')}
+          type="text"
+          placeholder="e.g. Frontend Developer"
+          aria-required="true"
+          autoFocus={Boolean(jobToEdit)}
         />
+      </Field>
+
+      <Field id="job-company" label="Company" required error={errors.company}>
+        <input
+          {...inputProps('company')}
+          type="text"
+          placeholder="e.g. Shopify"
+          aria-required="true"
+        />
+      </Field>
+
+      <Field id="job-location" label="Location">
+        <input {...inputProps('location')} type="text" placeholder="City or Remote" />
+      </Field>
+
+      <div className="job-form-row">
+        <Field id="job-appliedDate" label="Applied on" required error={errors.appliedDate}>
+          <input {...inputProps('appliedDate')} type="date" aria-required="true" />
+        </Field>
+
+        <Field id="job-status" label="Status">
+          <select {...inputProps('status')}>
+            {STATUSES.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </Field>
       </div>
-      <div className="field">
-        <label htmlFor="job-status">Status</label>
-        <select id="job-status" value={form.status} onChange={handleChange('status')}>
-          {STATUSES.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </div>
+
       {form.status === 'Interview' && (
-        <>
-          <div className="field">
-            <label htmlFor="job-interview-date">Interview date</label>
-            <input
-              id="job-interview-date"
-              type="date"
-              value={form.interviewDate}
-              onChange={handleChange('interviewDate')}
-              aria-invalid={Boolean(errors.interviewDate)}
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="job-interview-time">Interview time</label>
-            <input
-              id="job-interview-time"
-              type="time"
-              value={form.interviewTime}
-              onChange={handleChange('interviewTime')}
-              aria-invalid={Boolean(errors.interviewTime)}
-            />
-          </div>
-        </>
+        <div className="job-form-row">
+          <Field
+            id="job-interviewDate"
+            label="Interview date"
+            required
+            error={errors.interviewDate}
+          >
+            <input {...inputProps('interviewDate')} type="date" aria-required="true" />
+          </Field>
+          <Field
+            id="job-interviewTime"
+            label="Interview time"
+            required
+            error={errors.interviewTime}
+          >
+            <input {...inputProps('interviewTime')} type="time" aria-required="true" />
+          </Field>
+        </div>
       )}
-      {errorMessages.length > 0 && (
-        <ul className="form-errors" role="alert">
-          {errorMessages.map((message) => (
-            <li key={message}>{message}</li>
-          ))}
-        </ul>
-      )}
-      <button type="submit">{jobToEdit ? 'Save' : 'Add Job'}</button>
-      {jobToEdit && (
-        <button type="button" onClick={onCancel}>
-          Cancel
+
+      <div className="job-form-actions">
+        <button type="submit" className="btn btn-primary">
+          {jobToEdit ? (
+            <Save size={16} aria-hidden="true" />
+          ) : (
+            <Plus size={16} aria-hidden="true" />
+          )}
+          {jobToEdit ? 'Save changes' : 'Add application'}
         </button>
-      )}
+        {jobToEdit && (
+          <button type="button" className="btn btn-secondary" onClick={onCancel}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }

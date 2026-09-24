@@ -16,13 +16,31 @@ describe('JobForm', () => {
     const onSubmit = vi.fn();
     render(<JobForm onSubmit={onSubmit} />);
 
-    await user.click(screen.getByRole('button', { name: 'Add Job' }));
+    await user.click(screen.getByRole('button', { name: 'Add application' }));
 
     expect(onSubmit).not.toHaveBeenCalled();
-    const alert = screen.getByRole('alert');
-    expect(alert).toHaveTextContent('Enter the job title.');
-    expect(alert).toHaveTextContent('Enter the company name.');
-    expect(alert).toHaveTextContent('Pick the date you applied.');
+    // Each message sits under its own field and is announced with it
+    const title = screen.getByLabelText('Job title');
+    expect(title).toBeInvalid();
+    expect(title).toHaveAccessibleDescription('Enter the job title.');
+    expect(screen.getByLabelText('Company')).toHaveAccessibleDescription('Enter the company name.');
+    expect(screen.getByLabelText('Applied on')).toHaveAccessibleDescription(
+      'Pick the date you applied.',
+    );
+    // Focus moves to the first field that needs fixing
+    expect(title).toHaveFocus();
+  });
+
+  it('clears a field error as soon as that field is edited', async () => {
+    const user = userEvent.setup();
+    render(<JobForm onSubmit={vi.fn()} />);
+
+    await user.click(screen.getByRole('button', { name: 'Add application' }));
+    await user.type(screen.getByLabelText('Job title'), 'Dev');
+
+    expect(screen.getByLabelText('Job title')).not.toBeInvalid();
+    expect(screen.queryByText('Enter the job title.')).not.toBeInTheDocument();
+    expect(screen.getByText('Enter the company name.')).toBeInTheDocument();
   });
 
   it('submits a trimmed job and clears the form', async () => {
@@ -31,7 +49,7 @@ describe('JobForm', () => {
     render(<JobForm onSubmit={onSubmit} />);
 
     await fillRequired(user);
-    await user.click(screen.getByRole('button', { name: 'Add Job' }));
+    await user.click(screen.getByRole('button', { name: 'Add application' }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -52,13 +70,15 @@ describe('JobForm', () => {
 
     await fillRequired(user);
     await user.selectOptions(screen.getByLabelText('Status'), 'Interview');
-    await user.click(screen.getByRole('button', { name: 'Add Job' }));
+    await user.click(screen.getByRole('button', { name: 'Add application' }));
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(screen.getByRole('alert')).toHaveTextContent('Pick the interview time.');
+    expect(screen.getByLabelText('Interview time')).toHaveAccessibleDescription(
+      'Pick the interview time.',
+    );
 
     await user.type(screen.getByLabelText('Interview date'), '2026-05-10');
     await user.type(screen.getByLabelText('Interview time'), '14:30');
-    await user.click(screen.getByRole('button', { name: 'Add Job' }));
+    await user.click(screen.getByRole('button', { name: 'Add application' }));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ interviewDate: '2026-05-10', interviewTime: '14:30' }),
     );
@@ -80,7 +100,7 @@ describe('JobForm', () => {
     render(<JobForm jobToEdit={job} onSubmit={vi.fn()} onCancel={onCancel} />);
 
     expect(screen.getByLabelText('Job title')).toHaveValue('UI Engineer');
-    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onCancel).toHaveBeenCalled();
   });
