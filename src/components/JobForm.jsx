@@ -96,45 +96,48 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
         value={form.location}
         onChange={handleChange('location')}
       />
-      <label className="field">
-        Applied on
+      <div className="field">
+        <label htmlFor="job-applied">Applied on</label>
         <input
+          id="job-applied"
           type="date"
           value={form.appliedDate}
           onChange={handleChange('appliedDate')}
           aria-invalid={Boolean(errors.appliedDate)}
         />
-      </label>
-      <label className="field">
-        Status
-        <select value={form.status} onChange={handleChange('status')}>
+      </div>
+      <div className="field">
+        <label htmlFor="job-status">Status</label>
+        <select id="job-status" value={form.status} onChange={handleChange('status')}>
           {STATUSES.map((status) => (
             <option key={status} value={status}>
               {status}
             </option>
           ))}
         </select>
-      </label>
+      </div>
       {form.status === 'Interview' && (
         <>
-          <label className="field">
-            Interview date
+          <div className="field">
+            <label htmlFor="job-interview-date">Interview date</label>
             <input
+              id="job-interview-date"
               type="date"
               value={form.interviewDate}
               onChange={handleChange('interviewDate')}
               aria-invalid={Boolean(errors.interviewDate)}
             />
-          </label>
-          <label className="field">
-            Interview time
+          </div>
+          <div className="field">
+            <label htmlFor="job-interview-time">Interview time</label>
             <input
+              id="job-interview-time"
               type="time"
               value={form.interviewTime}
               onChange={handleChange('interviewTime')}
               aria-invalid={Boolean(errors.interviewTime)}
             />
-          </label>
+          </div>
         </>
       )}
       {errorMessages.length > 0 && (

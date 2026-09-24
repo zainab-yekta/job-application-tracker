@@ -9,6 +9,11 @@ export default defineConfig({
     // ExcelJS is about 900 kB on its own; it only loads when a user exports
     chunkSizeWarningLimit: 1000,
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.js',
+    css: false,
+  },
   server: {
     port: 3000,
     open: true,
