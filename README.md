@@ -58,7 +58,7 @@ A React app for keeping track of job applications. You log each application, mov
 
 - Light and dark theme that follows the system setting, with a switch in the navigation bar
 - Responsive layout from 375px phones to wide screens, with a collapsible menu on small screens
-- Help chat behind a round button in the corner, with one tap quick questions about adding jobs, reminders, exports, backups, analytics and where data is kept
+- Help chat behind a round button in the corner, with one tap quick questions about adding jobs, reminders, exports, backups, analytics and where data is kept. It matches keywords against a built-in list of answers (`utils/chatbotReplies.js`), so it works offline and never calls an outside service
 - A recovery page instead of a blank screen if something fails, and a not found page for unknown addresses
 
 ## Tech stack
@@ -173,7 +173,7 @@ The app opens at http://localhost:3000/job-application-tracker/.
 npm test
 ```
 
-There are 95 tests. They cover the storage service and its migration from the first version, password hashing, backup validation and restore, date parsing and formatting, interview reminders, search and filters, the analytics suggestions, the help chat, the offer messages, the job form (including error messages and focus), the error page, and the main flows in the app: separate data per account, refusing a duplicate email, staying logged in after a reload, upgrading old passwords, switching themes and the not found page.
+There are 96 tests. They cover the storage service and its migration from the first version, password hashing, backup validation and restore, date parsing and formatting, interview reminders, search and filters, the analytics suggestions, the help chat, the offer messages, the job form (including error messages and focus), the error page, and the main flows in the app: separate data per account, editing an application, refusing a duplicate email, staying logged in after a reload, upgrading old passwords, switching themes and the not found page.
 
 ## Continuous integration and deployment
 
