@@ -1,4 +1,4 @@
-import { parseLocalDate } from './FormatDate';
+import { parseLocalDate } from './formatDate';
 
 // Interviews that are still to come today or tomorrow
 export function getUpcomingInterviews(jobs, now = new Date()) {

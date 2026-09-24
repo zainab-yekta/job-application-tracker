@@ -15,12 +15,11 @@ import {
   LineChart,
   Line,
 } from 'recharts';
-import { formatDisplayDate } from '../utils/FormatDate';
+import { formatDisplayDate } from '../utils/formatDate';
 import { getSuggestions } from '../utils/suggestions';
+import { isOfferStatus } from '../constants/statuses';
 
 const COLORS = ['#8884d8', '#82ca9d', '#ff6b6b']; // Custom colors for Pie Chart
-
-const isOffer = (job) => job.status === 'Offer' || job.status === 'Accepted Offer';
 
 function Analytics({ jobs }) {
   const [chartType, setChartType] = useState('bar'); // toggle state
@@ -29,7 +28,7 @@ function Analytics({ jobs }) {
   const appliedCount = jobs.filter((job) => job.status === 'Applied').length;
   const interviewCount = jobs.filter((job) => job.status === 'Interview').length;
   const rejectedCount = jobs.filter((job) => job.status === 'Rejected').length;
-  const offerCount = jobs.filter(isOffer).length;
+  const offerCount = jobs.filter((job) => isOfferStatus(job.status)).length;
 
   const data = [
     { name: 'Interviews', value: interviewCount },

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { STATUSES } from '../constants/statuses';
 
 const EMPTY_FORM = {
   title: '',
@@ -77,11 +78,11 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
       />
       <input type="date" value={form.date} onChange={handleChange('date')} />
       <select value={form.status} onChange={handleChange('status')}>
-        <option value="Applied">Applied</option>
-        <option value="Interview">Interview</option>
-        <option value="Rejected">Rejected</option>
-        <option value="Offer">Offer</option>
-        <option value="Accepted Offer">Accepted Offer</option>
+        {STATUSES.map((status) => (
+          <option key={status} value={status}>
+            {status}
+          </option>
+        ))}
       </select>
       {/* Time input only if status is Interview */}
       {form.status === 'Interview' && (

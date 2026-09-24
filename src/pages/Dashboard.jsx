@@ -5,8 +5,9 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { formatDisplayDate } from '../utils/FormatDate';
+import { formatDisplayDate } from '../utils/formatDate';
 import { getUpcomingInterviews } from '../utils/reminders';
+import { STATUSES } from '../constants/statuses';
 
 function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
   const [jobToEdit, setJobToEdit] = useState(null);
@@ -158,11 +159,11 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         <label htmlFor="statusFilter">Filter by Status: </label>
         <select id="statusFilter" value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="All">All</option>
-          <option value="Applied">Applied</option>
-          <option value="Interview">Interview</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Offer">Offer</option>
-          <option value="Accepted Offer">Accepted Offer</option>
+          {STATUSES.map((status) => (
+            <option key={status} value={status}>
+              {status}
+            </option>
+          ))}
         </select>
       </div>
 

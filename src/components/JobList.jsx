@@ -1,5 +1,6 @@
 import React from 'react';
-import { formatDisplayDate } from '../utils/FormatDate';
+import { formatDisplayDate } from '../utils/formatDate';
+import { statusClassName } from '../constants/statuses';
 
 function JobList({ jobs, onDelete, onEdit }) {
   if (jobs.length === 0) {
@@ -18,9 +19,7 @@ function JobList({ jobs, onDelete, onEdit }) {
               Date: {job.date ? formatDisplayDate(job.date) : 'N/A'}
               {job.status === 'Interview' && job.interviewTime ? `, ${job.interviewTime}` : ''}
             </div>
-            <div
-              className={`job-meta status ${job.status ? job.status.toLowerCase().replace(/\s+/g, '-') : 'na'}`}
-            >
+            <div className={`job-meta status ${statusClassName(job.status)}`}>
               Status: {job.status || 'N/A'}
             </div>
           </div>
