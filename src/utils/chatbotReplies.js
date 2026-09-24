@@ -4,6 +4,11 @@ export const GREETING =
 // First topic whose keywords appear in the message wins, so specific topics come first
 const TOPICS = [
   {
+    keywords: ['backup', 'back up', 'restore', 'import', 'another browser', 'move'],
+    reply:
+      'Click Download backup on the Tracker page to save everything as a file. On another browser, log in and click Restore backup to load it.',
+  },
+  {
     keywords: ['export', 'excel', 'pdf', 'download'],
     reply:
       'Use the Export to Excel or Export to PDF buttons on the Tracker page. The file includes every application you have saved.',
@@ -40,7 +45,7 @@ const TOPICS = [
   {
     keywords: ['data', 'save', 'stored', 'storage', 'privacy', 'private'],
     reply:
-      'Everything is saved in your own browser. Nothing is sent to a server, so clearing your browser data removes it.',
+      'Everything is saved in your own browser and each account has its own list. Nothing is sent to a server, so clearing your browser data removes it. Download a backup to keep a copy.',
   },
   {
     keywords: ['login', 'log in', 'register', 'account', 'password', 'sign'],
