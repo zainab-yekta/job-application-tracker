@@ -1,4 +1,6 @@
 import React from 'react';
+import { RefreshCw, TriangleAlert } from 'lucide-react';
+import './StatusPage.css';
 
 // Shows a friendly page instead of a blank screen when something breaks while
 // rendering. A common real case: the site was updated while the page was open,
@@ -28,19 +30,31 @@ class ErrorBoundary extends React.Component {
     if (!this.state.hasError) return this.props.children;
 
     return (
-      <div className="status-page" role="alert">
-        <h1>Something went wrong</h1>
-        <p>
-          The page could not be shown. Your saved applications are safe. Reloading usually fixes
-          this.
-        </p>
-        <div className="status-page-actions">
-          <button type="button" onClick={() => window.location.reload()}>
-            Reload the page
-          </button>
-          <a href="#/">Go to the home page</a>
+      <main className="status-page">
+        <div className="status-page-card card" role="alert">
+          <span className="status-page-icon is-error" aria-hidden="true">
+            <TriangleAlert size={28} />
+          </span>
+          <h1>Something went wrong</h1>
+          <p>
+            The page could not be shown. Your saved applications are safe. Reloading usually fixes
+            this.
+          </p>
+          <div className="status-page-actions">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCw size={16} aria-hidden="true" />
+              Reload the page
+            </button>
+            <a href="#/" className="btn btn-secondary">
+              Go to the home page
+            </a>
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 }

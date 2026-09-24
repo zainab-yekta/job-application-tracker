@@ -1,0 +1,59 @@
+/* Full page messages: not found and the error page */
+.status-page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-16) var(--space-4);
+}
+
+.status-page-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+  padding: var(--space-10) var(--space-6);
+  text-align: center;
+}
+
+.status-page-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.status-page-icon.is-error {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.status-page-code {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-fg-subtle);
+}
+
+.status-page-card h1 {
+  margin-top: var(--space-1);
+  font-size: var(--text-2xl);
+}
+
+.status-page-card > p:not(.status-page-code) {
+  max-width: 40ch;
+  margin-top: var(--space-3);
+  color: var(--color-fg-muted);
+}
+
+.status-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
