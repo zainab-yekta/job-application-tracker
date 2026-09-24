@@ -20,19 +20,52 @@ function Navbar({ isLoggedIn, onLogout }) {
       </button>
 
       <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
-        <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
+        <li>
+          <Link to="/" onClick={() => setIsOpen(false)}>
+            Home
+          </Link>
+        </li>
         {isLoggedIn ? (
           <>
-            <li><Link to="/dashboard" onClick={() => setIsOpen(false)}>Tracker</Link></li>
-            <li><Link to="/analytics" onClick={() => setIsOpen(false)}>Analytics</Link></li>
-            <li><button onClick={() => { onLogout(); setIsOpen(false); }} className="logout-btn">Logout</button></li>
+            <li>
+              <Link to="/dashboard" onClick={() => setIsOpen(false)}>
+                Tracker
+              </Link>
+            </li>
+            <li>
+              <Link to="/analytics" onClick={() => setIsOpen(false)}>
+                Analytics
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  onLogout();
+                  setIsOpen(false);
+                }}
+                className="logout-btn"
+              >
+                Logout
+              </button>
+            </li>
           </>
         ) : (
           <>
-            <li><Link to="/login" onClick={() => setIsOpen(false)}>Login</Link></li>
-            <li><Link to="/register" onClick={() => setIsOpen(false)}>Register</Link></li>
-            <li><Link to="/about" onClick={() => setIsOpen(false)}>About</Link></li>
-
+            <li>
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" onClick={() => setIsOpen(false)}>
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={() => setIsOpen(false)}>
+                About
+              </Link>
+            </li>
           </>
         )}
       </ul>

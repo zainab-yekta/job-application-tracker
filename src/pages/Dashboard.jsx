@@ -56,7 +56,7 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         company: job.company,
         status: job.status,
         date: job.date,
-        time: job.interviewTime
+        time: job.interviewTime,
       });
     });
 
@@ -147,7 +147,6 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         />
       </div>
 
-      
       <JobForm
         key={jobToEdit ? jobToEdit.id : 'new'}
         onSubmit={handleSubmit}
@@ -155,14 +154,9 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         jobToEdit={jobToEdit}
       />
 
-
       <div className="status-filter">
         <label htmlFor="statusFilter">Filter by Status: </label>
-        <select
-          id="statusFilter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
+        <select id="statusFilter" value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="All">All</option>
           <option value="Applied">Applied</option>
           <option value="Interview">Interview</option>
@@ -174,11 +168,7 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
 
       <div className="date-filter">
         <label>Filter by Date: </label>
-        <input
-          type="date"
-          value={dateFilter}
-          onChange={(e) => setDateFilter(e.target.value)}
-        />
+        <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
       </div>
 
       <div className="export-buttons">

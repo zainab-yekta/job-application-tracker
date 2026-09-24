@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import './Chatbot.css';
 
 const chatbotData = {
-  "hello": "Hi there! How can I assist you today?",
-  "how to use this app": "Just login, add jobs, track status, and view analytics.",
-  "what is this app": "This is a Job Application Tracker to manage your job search.",
-  "thanks": "You're welcome! 😊",
-  "bye": "Goodbye! Have a great day!"
+  hello: 'Hi there! How can I assist you today?',
+  'how to use this app': 'Just login, add jobs, track status, and view analytics.',
+  'what is this app': 'This is a Job Application Tracker to manage your job search.',
+  thanks: "You're welcome! 😊",
+  bye: 'Goodbye! Have a great day!',
 };
 
 function Chatbot() {

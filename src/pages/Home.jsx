@@ -25,7 +25,8 @@ function Home() {
 
       <div className="home-links">
         <p>
-          Already registered? <Link to="/login">Login here</Link><br />
+          Already registered? <Link to="/login">Login here</Link>
+          <br />
           New user? <Link to="/register">Create an account</Link>
         </p>
 

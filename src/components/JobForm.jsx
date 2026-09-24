@@ -75,11 +75,7 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
         value={form.location}
         onChange={handleChange('location')}
       />
-      <input
-        type="date"
-        value={form.date}
-        onChange={handleChange('date')}
-      />
+      <input type="date" value={form.date} onChange={handleChange('date')} />
       <select value={form.status} onChange={handleChange('status')}>
         <option value="Applied">Applied</option>
         <option value="Interview">Interview</option>
@@ -98,7 +94,9 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
       )}
       <button type="submit">{jobToEdit ? 'Save' : 'Add Job'}</button>
       {jobToEdit && (
-        <button type="button" onClick={onCancel}>Cancel</button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
       )}
     </form>
   );

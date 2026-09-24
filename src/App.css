@@ -3,8 +3,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #4f7cbe; 
-  
+  background-color: #4f7cbe;
 }
 
 * {
@@ -64,7 +63,7 @@ button {
 }
 
 .status-filter select,
-.date-filter input[type="date"] {
+.date-filter input[type='date'] {
   width: 150px;
   padding: 0.4rem;
   font-size: 1rem;
@@ -90,7 +89,7 @@ button {
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -264,7 +263,7 @@ button.delete:hover {
   left: 50%;
   transform: translateX(-50%);
   background-color: #f0f8ff;
-  border: 2px solid #4CAF50;
+  border: 2px solid #4caf50;
   padding: 1rem;
   border-radius: 10px;
   text-align: center;
@@ -273,7 +272,7 @@ button.delete:hover {
   z-index: 9999;
   width: 90%;
   max-width: 600px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .date-range {
@@ -287,7 +286,7 @@ button.delete:hover {
   padding: 20px;
   margin: 20px 0;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .analytics-grid {
@@ -295,7 +294,8 @@ button.delete:hover {
   gap: 20px;
   flex-wrap: wrap;
 }
-.analytics-stats, .analytics-chart {
+.analytics-stats,
+.analytics-chart {
   flex: 1;
   min-width: 300px;
 }
@@ -385,7 +385,7 @@ button.delete:hover {
 .get-started-btn {
   display: inline-block;
   text-decoration: none;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -427,7 +427,7 @@ button.delete:hover {
 }
 
 .home-links a {
-  color: #007BFF;
+  color: #007bff;
   text-decoration: none;
 }
 
@@ -447,8 +447,3 @@ html {
   min-height: 100vh;
   background-color: #f0f2f5;
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -8,7 +8,12 @@ import {
   Tooltip,
   ResponsiveContainer,
   Label,
-  PieChart, Pie, Cell, Legend,LineChart, Line
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  LineChart,
+  Line,
 } from 'recharts';
 import { formatDisplayDate } from '../utils/FormatDate';
 import { getSuggestions } from '../utils/suggestions';
@@ -21,9 +26,9 @@ function Analytics({ jobs }) {
   const [chartType, setChartType] = useState('bar'); // toggle state
 
   const totalApplied = jobs.length;
-  const appliedCount = jobs.filter(job => job.status === 'Applied').length;
-  const interviewCount = jobs.filter(job => job.status === 'Interview').length;
-  const rejectedCount = jobs.filter(job => job.status === 'Rejected').length;
+  const appliedCount = jobs.filter((job) => job.status === 'Applied').length;
+  const interviewCount = jobs.filter((job) => job.status === 'Interview').length;
+  const rejectedCount = jobs.filter((job) => job.status === 'Rejected').length;
   const offerCount = jobs.filter(isOffer).length;
 
   const data = [
@@ -34,7 +39,7 @@ function Analytics({ jobs }) {
 
   // 'YYYY-MM-DD' strings sort correctly as plain text
   const jobDates = jobs
-    .map(job => job.date)
+    .map((job) => job.date)
     .filter(Boolean)
     .sort();
 
@@ -42,12 +47,12 @@ function Analytics({ jobs }) {
   const latestDate = jobDates.length ? formatDisplayDate(jobDates[jobDates.length - 1]) : 'N/A';
 
   const toggleChart = () => {
-    setChartType(prev => (prev === 'bar' ? 'pie' : 'bar'));
+    setChartType((prev) => (prev === 'bar' ? 'pie' : 'bar'));
   };
 
   // Interview trend data, grouped by day and kept in date order
   const interviewCountsByDay = jobs
-    .filter(job => job.status === 'Interview' && job.date)
+    .filter((job) => job.status === 'Interview' && job.date)
     .reduce((acc, job) => {
       acc[job.date] = (acc[job.date] || 0) + 1;
       return acc;
@@ -55,9 +60,15 @@ function Analytics({ jobs }) {
 
   const interviewTrendData = Object.keys(interviewCountsByDay)
     .sort()
-    .map(day => ({ date: formatDisplayDate(day), count: interviewCountsByDay[day] }));
+    .map((day) => ({ date: formatDisplayDate(day), count: interviewCountsByDay[day] }));
 
-  const suggestions = getSuggestions({ totalApplied, appliedCount, interviewCount, rejectedCount, offerCount });
+  const suggestions = getSuggestions({
+    totalApplied,
+    appliedCount,
+    interviewCount,
+    rejectedCount,
+    offerCount,
+  });
 
   return (
     <div style={{ padding: '20px' }}>
@@ -68,10 +79,7 @@ function Analytics({ jobs }) {
         </button>
         <ResponsiveContainer width="100%" height={300}>
           {chartType === 'bar' ? (
-            <BarChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 60, bottom: 20 }}
-            >
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 60, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis
@@ -91,13 +99,7 @@ function Analytics({ jobs }) {
             </BarChart>
           ) : (
             <PieChart>
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={100}
-                label
-              >
+              <Pie data={data} dataKey="value" nameKey="name" outerRadius={100} label>
                 {data.map((entry, index) => (
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
@@ -109,11 +111,21 @@ function Analytics({ jobs }) {
         </ResponsiveContainer>
 
         <div style={{ marginTop: '20px' }} className="analytics-stats">
-          <p>📩 <strong>Total Jobs Applied:</strong> {totalApplied}</p>
-          <p>🎯 <strong>Interviews:</strong> {interviewCount}</p>
-          <p>❌ <strong>Rejections:</strong> {rejectedCount}</p>
-          <p>🏆 <strong>Offers:</strong> {offerCount}</p>
-          <p>🗓️ <strong>Applications Date Range:</strong> From {earliestDate} to {latestDate}</p>
+          <p>
+            📩 <strong>Total Jobs Applied:</strong> {totalApplied}
+          </p>
+          <p>
+            🎯 <strong>Interviews:</strong> {interviewCount}
+          </p>
+          <p>
+            ❌ <strong>Rejections:</strong> {rejectedCount}
+          </p>
+          <p>
+            🏆 <strong>Offers:</strong> {offerCount}
+          </p>
+          <p>
+            🗓️ <strong>Applications Date Range:</strong> From {earliestDate} to {latestDate}
+          </p>
         </div>
       </div>
 
@@ -134,7 +146,14 @@ function Analytics({ jobs }) {
         )}
       </div>
       {suggestions.length > 0 && (
-        <div style={{ marginTop: '30px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f5f5f5' }}>
+        <div
+          style={{
+            marginTop: '30px',
+            padding: '15px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f5f5f5',
+          }}
+        >
           <h3>🧠 Smart Suggestions</h3>
           <ul>
             {suggestions.map((text) => (

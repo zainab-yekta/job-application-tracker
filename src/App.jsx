@@ -15,7 +15,9 @@ function App() {
   const [jobs, setJobs] = useState(() => {
     const saved = localStorage.getItem('jobs');
     return saved
-      ? JSON.parse(saved).map(job => job.status === 'Accepted' ? { ...job, status: 'Offer' } : job)
+      ? JSON.parse(saved).map((job) =>
+          job.status === 'Accepted' ? { ...job, status: 'Offer' } : job,
+        )
       : [];
   });
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
@@ -34,11 +36,15 @@ function App() {
 
   const showStatusMessage = (job) => {
     if (job.status === 'Offer') {
-      setCongratsMessage('Waoo, you got an offer, think about this offer and then accept it. Congratulations.');
+      setCongratsMessage(
+        'Waoo, you got an offer, think about this offer and then accept it. Congratulations.',
+      );
       setShowAcceptButtons(false);
       setShowCongrats(true);
     } else if (job.status === 'Accepted Offer') {
-      setCongratsMessage(`Congratulations again, finally you accepted the offer at ${job.company}, and you are selected. So you will start your job soon. Best of luck for your new journey. For now, let me know if you want to continue with us in job searching and want us to keep the data tracking or do you want to clear your applied job tracking?`);
+      setCongratsMessage(
+        `Congratulations again, finally you accepted the offer at ${job.company}, and you are selected. So you will start your job soon. Best of luck for your new journey. For now, let me know if you want to continue with us in job searching and want us to keep the data tracking or do you want to clear your applied job tracking?`,
+      );
       setShowAcceptButtons(true);
       setShowCongrats(true);
     } else {
@@ -102,12 +108,7 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Dashboard
-                  jobs={jobs}
-                  onAdd={addJob}
-                  onDelete={deleteJob}
-                  onUpdate={updateJob}
-                />
+                <Dashboard jobs={jobs} onAdd={addJob} onDelete={deleteJob} onUpdate={updateJob} />
               </ProtectedRoute>
             }
           />

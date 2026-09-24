@@ -7,6 +7,7 @@ A React app for keeping track of job applications. You log each application, mov
 ## Features
 
 **Tracking**
+
 - Add, edit and delete applications with title, company, location, date and status
 - Interview time field that appears when the status is Interview
 - Search by job title or company, filter by status or by date
@@ -14,19 +15,23 @@ A React app for keeping track of job applications. You log each application, mov
 - Confirmation before deleting
 
 **Reminders**
+
 - Banner on the dashboard for interviews coming up today or tomorrow, using the interview date and time
 - Message when an application moves to Offer or Accepted Offer, with the option to clear the list once you've accepted a job
 
 **Analytics**
+
 - Bar chart or pie chart of interviews, rejections and offers (switchable)
 - Line chart of interviews over time
 - Totals and the date range of your applications
 - Suggestions based on your numbers, for example a nudge to follow up when several applications are still waiting
 
 **Export**
+
 - Download all applications as an Excel file or a PDF report
 
 **Other**
+
 - Register and log in (a local demo, see the notes below), with the dashboard and analytics pages only reachable when logged in
 - Login stays active after a page refresh
 - Responsive layout with a collapsible menu on small screens
@@ -34,15 +39,15 @@ A React app for keeping track of job applications. You log each application, mov
 
 ## Tech stack
 
-| Area | Tools |
-|------|-------|
-| UI | React 19 with hooks |
+| Area    | Tools                                                    |
+| ------- | -------------------------------------------------------- |
+| UI      | React 19 with hooks                                      |
 | Routing | React Router 7 (HashRouter, so it works on GitHub Pages) |
-| Charts | Recharts |
-| Export | ExcelJS, jsPDF with jspdf-autotable, FileSaver |
-| Storage | Browser localStorage |
-| Build | Create React App (react-scripts) |
-| Hosting | GitHub Pages via gh-pages |
+| Charts  | Recharts                                                 |
+| Export  | ExcelJS, jsPDF with jspdf-autotable, FileSaver           |
+| Storage | Browser localStorage                                     |
+| Build   | Create React App (react-scripts)                         |
+| Hosting | GitHub Pages via gh-pages                                |
 
 ## Run locally
 
@@ -59,12 +64,12 @@ The app opens at http://localhost:3000.
 
 ## Scripts
 
-| Command | What it does |
-|---------|--------------|
-| `npm start` | Starts the development server |
-| `npm run build` | Builds the production version into `build/` |
-| `npm test` | Runs the test runner |
-| `npm run deploy` | Builds and publishes to GitHub Pages |
+| Command          | What it does                                |
+| ---------------- | ------------------------------------------- |
+| `npm start`      | Starts the development server               |
+| `npm run build`  | Builds the production version into `build/` |
+| `npm test`       | Runs the test runner                        |
+| `npm run deploy` | Builds and publishes to GitHub Pages        |
 
 ## Project structure
 
