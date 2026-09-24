@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# editor
+.vs/
+.vscode/
+.idea/
+
+# personal notes and local design references
+Things Did.txt
+old-ui-ux-design/
