@@ -533,3 +533,22 @@ html {
 .empty-message {
   text-align: center;
 }
+
+.backup-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.backup-controls p {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.backup-success {
+  color: #0a6847;
+  font-size: 0.9rem;
+}

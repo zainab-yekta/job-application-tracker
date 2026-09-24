@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import JobList from '../components/JobList';
 import JobForm from '../components/JobForm';
+import BackupControls from '../components/BackupControls';
 import { formatDisplayDate } from '../utils/formatDate';
 import { getUpcomingInterviews } from '../utils/reminders';
 import { filterJobs } from '../utils/filterJobs';
 import { exportToExcel, exportToPDF } from '../utils/exportJobs';
 import { STATUSES } from '../constants/statuses';
 
-function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate }) {
+function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
   const [jobToEdit, setJobToEdit] = useState(null);
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,6 +123,8 @@ function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate }) {
           {exportError}
         </p>
       )}
+
+      <BackupControls jobs={jobs} onImport={onImport} />
 
       <JobList
         jobs={filteredJobs}
