@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import StatusPopup from './StatusPopup';
@@ -7,6 +7,30 @@ import StatusPopup from './StatusPopup';
 const job = (status) => ({ id: 1, title: 'UI Engineer', company: 'Slack', status });
 
 describe('StatusPopup', () => {
+  // jsdom has no dialog support, so give it the browser behavior that matters:
+  // showModal opens the dialog and close fires a close event
+  beforeAll(() => {
+    HTMLDialogElement.prototype.showModal = function showModal() {
+      this.setAttribute('open', '');
+    };
+    HTMLDialogElement.prototype.close = function close() {
+      this.removeAttribute('open');
+      this.dispatchEvent(new Event('close'));
+    };
+  });
+
+  it('keeps the accepted offer dialog open in strict mode', () => {
+    const onClose = vi.fn();
+    render(
+      <React.StrictMode>
+        <StatusPopup job={job('Accepted Offer')} onClose={onClose} onDeleteAll={vi.fn()} />
+      </React.StrictMode>,
+    );
+
+    expect(screen.getByRole('dialog')).toHaveAttribute('open');
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it('shows a dismissible toast for a new offer', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();

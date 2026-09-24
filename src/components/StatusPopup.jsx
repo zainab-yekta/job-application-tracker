@@ -9,14 +9,15 @@ function AcceptedOfferDialog({ job, onClose, onDeleteAll }) {
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog) return undefined;
-    // showModal traps focus and closes on Escape (fall back where unsupported)
+    if (!dialog || dialog.open) return;
+    // showModal traps focus and closes on Escape (fall back where unsupported).
+    // No cleanup: calling close() there would fire onClose and hide the dialog
+    // straight away in development, where React runs effects twice.
     if (typeof dialog.showModal === 'function') {
       dialog.showModal();
     } else {
       dialog.setAttribute('open', '');
     }
-    return () => dialog.close?.();
   }, []);
 
   return (
