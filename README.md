@@ -6,6 +6,8 @@ A React app for keeping track of job applications. You log each application, mov
 
 **[Live demo](https://zainab-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zainab-yekta/job-application-tracker)**
 
+![A walkthrough of the app: logging in, searching, adding an application with an interview, editing it to an offer, the analytics charts and the dark theme](docs/preview.gif)
+
 ## Screenshots
 
 ![Home page with a headline, sign up button and a preview of the tracker](docs/screenshots/home.png)
