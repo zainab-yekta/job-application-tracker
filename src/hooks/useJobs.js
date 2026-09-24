@@ -1,32 +1,32 @@
-import { useState, useEffect } from 'react';
-import { migrateJob } from '../utils/migrateJob';
+import { useState } from 'react';
+import { loadJobs, saveJobs } from '../services/storage';
 
-const STORAGE_KEY = 'jobs';
+// The job list of one account. The component using this hook is keyed by the
+// account's email, so switching accounts starts with a fresh list.
+export function useJobs(email) {
+  const [jobs, setJobs] = useState(() => loadJobs(email));
+  const [saveFailed, setSaveFailed] = useState(false);
 
-function loadJobs() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved.map(migrateJob) : [];
-  } catch {
-    return [];
-  }
-}
+  // Every change goes through here so the saved copy always matches the screen
+  const commit = (next) => {
+    setJobs(next);
+    setSaveFailed(!saveJobs(email, next));
+  };
 
-export function useJobs() {
-  const [jobs, setJobs] = useState(loadJobs);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs));
-  }, [jobs]);
-
-  const addJob = (job) => setJobs((prev) => [...prev, job]);
+  const addJob = (job) => commit([...jobs, job]);
 
   const updateJob = (updatedJob) =>
-    setJobs((prev) => prev.map((job) => (job.id === updatedJob.id ? updatedJob : job)));
+    commit(jobs.map((job) => (job.id === updatedJob.id ? updatedJob : job)));
 
-  const deleteJob = (id) => setJobs((prev) => prev.filter((job) => job.id !== id));
+  const deleteJob = (id) => commit(jobs.filter((job) => job.id !== id));
 
-  const clearJobs = () => setJobs([]);
+  const clearJobs = () => commit([]);
 
-  return { jobs, addJob, updateJob, deleteJob, clearJobs };
+  // Imported jobs replace saved jobs that have the same id
+  const importJobs = (imported) => {
+    const importedIds = new Set(imported.map((job) => job.id));
+    commit([...jobs.filter((job) => !importedIds.has(job.id)), ...imported]);
+  };
+
+  return { jobs, saveFailed, addJob, updateJob, deleteJob, clearJobs, importJobs };
 }

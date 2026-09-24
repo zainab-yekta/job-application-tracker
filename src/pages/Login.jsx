@@ -2,27 +2,24 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
   const location = useLocation();
   const justRegistered = location.state?.registered;
+  const [email, setEmail] = useState(location.state?.email || '');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    let storedUser;
-    try {
-      storedUser = JSON.parse(localStorage.getItem('user'));
-    } catch {
-      storedUser = null;
-    }
+    setSubmitting(true);
+    const problem = await onLogin(email, password);
+    setSubmitting(false);
 
-    if (storedUser?.email === email.trim() && storedUser?.password === password) {
-      onLogin();
-      navigate('/dashboard');
+    if (problem) {
+      setError(problem);
     } else {
-      setError('The email or password is not correct.');
+      navigate('/dashboard');
     }
   };
 
@@ -64,7 +61,9 @@ function Login({ onLogin }) {
             {error}
           </p>
         )}
-        <button type="submit">Login</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Logging in…' : 'Login'}
+        </button>
       </form>
       <p>
         Don&apos;t have an account? <Link to="/register">Register</Link>

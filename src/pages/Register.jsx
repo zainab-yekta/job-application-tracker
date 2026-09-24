@@ -1,28 +1,30 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const MIN_PASSWORD_LENGTH = 6;
-
-function Register() {
+function Register({ onRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    if (password.length < MIN_PASSWORD_LENGTH) {
-      setError(`Use at least ${MIN_PASSWORD_LENGTH} characters for the password.`);
-      return;
-    }
     if (password !== confirmPassword) {
       setError('The passwords do not match.');
       return;
     }
 
-    localStorage.setItem('user', JSON.stringify({ email: email.trim(), password }));
-    navigate('/login', { state: { registered: true } });
+    setSubmitting(true);
+    const problem = await onRegister(email, password);
+    setSubmitting(false);
+
+    if (problem) {
+      setError(problem);
+    } else {
+      navigate('/login', { state: { registered: true, email: email.trim() } });
+    }
   };
 
   return (
@@ -71,7 +73,9 @@ function Register() {
             {error}
           </p>
         )}
-        <button type="submit">Register</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Creating account…' : 'Register'}
+        </button>
       </form>
       <p className="auth-note">
         This is a demo account stored only in your browser. Please don&apos;t reuse a real password.

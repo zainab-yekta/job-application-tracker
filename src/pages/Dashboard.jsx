@@ -7,7 +7,7 @@ import { filterJobs } from '../utils/filterJobs';
 import { exportToExcel, exportToPDF } from '../utils/exportJobs';
 import { STATUSES } from '../constants/statuses';
 
-function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
+function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate }) {
   const [jobToEdit, setJobToEdit] = useState(null);
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -46,6 +46,13 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
   return (
     <div className="app-container">
       <h1>Job Application Tracker</h1>
+
+      {saveFailed && (
+        <p className="form-errors" role="alert">
+          Your latest change could not be saved in this browser. Storage may be full or turned off,
+          so download a backup before closing the page.
+        </p>
+      )}
 
       {showNotification && notificationJobs.length > 0 && (
         <div className="notification" role="status">

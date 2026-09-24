@@ -17,9 +17,12 @@ import './App.css';
 // The chart library is large, so the Analytics page loads on first visit
 const Analytics = lazy(() => import('./pages/Analytics'));
 
-function App() {
-  const { jobs, addJob, updateJob, deleteJob, clearJobs } = useJobs();
-  const { isLoggedIn, login, logout } = useAuth();
+// Everything that depends on the logged in account. App gives it a `key` of the
+// account's email, so logging in as someone else loads that person's jobs.
+function Workspace({ auth }) {
+  const { jobs, saveFailed, addJob, updateJob, deleteJob, clearJobs, importJobs } = useJobs(
+    auth.user,
+  );
   // The job whose new status triggered the congratulations popup
   const [popupJob, setPopupJob] = useState(null);
 
@@ -46,8 +49,10 @@ function App() {
     setPopupJob(null);
   };
 
+  const loggedInRedirect = <Navigate to="/dashboard" replace />;
+
   return (
-    <div>
+    <>
       {popupJob && (
         <StatusPopup
           job={popupJob}
@@ -55,44 +60,59 @@ function App() {
           onDeleteAll={handleDeleteAll}
         />
       )}
-      <Router>
-        <Navbar isLoggedIn={isLoggedIn} onLogout={logout} />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login onLogin={login} />} />
-          <Route path="/register" element={<Register />} />
-          {/* Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Dashboard
-                  jobs={jobs}
-                  onAdd={handleAdd}
-                  onDelete={deleteJob}
-                  onUpdate={handleUpdate}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Suspense fallback={<p className="empty-message">Loading analytics…</p>}>
-                  <Analytics jobs={jobs} />
-                </Suspense>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/login"
+          element={auth.isLoggedIn ? loggedInRedirect : <Login onLogin={auth.login} />}
+        />
+        <Route
+          path="/register"
+          element={auth.isLoggedIn ? loggedInRedirect : <Register onRegister={auth.register} />}
+        />
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isLoggedIn={auth.isLoggedIn}>
+              <Dashboard
+                jobs={jobs}
+                saveFailed={saveFailed}
+                onAdd={handleAdd}
+                onDelete={deleteJob}
+                onUpdate={handleUpdate}
+                onImport={importJobs}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute isLoggedIn={auth.isLoggedIn}>
+              <Suspense fallback={<p className="empty-message">Loading analytics…</p>}>
+                <Analytics jobs={jobs} />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
+  );
+}
 
-        <Chatbot />
-      </Router>
-    </div>
+function App() {
+  const auth = useAuth();
+
+  return (
+    <Router>
+      <Navbar isLoggedIn={auth.isLoggedIn} onLogout={auth.logout} />
+      <Workspace key={auth.user ?? 'guest'} auth={auth} />
+      <Chatbot />
+    </Router>
   );
 }
 
