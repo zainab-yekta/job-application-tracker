@@ -6,6 +6,18 @@ A React app for keeping track of job applications. You log each application, mov
 
 **[Live demo](https://zainab-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zainab-yekta/job-application-tracker)**
 
+## Screenshots
+
+![Home page with a headline, sign up button and a preview of the tracker](docs/screenshots/home.png)
+
+![Tracker with summary numbers, search and filters, application cards and the add application form](docs/screenshots/dashboard.png)
+
+![Analytics with summary cards, applications by status and a running total of interviews](docs/screenshots/analytics.png)
+
+| Dark theme                                                        | On a phone                                                                               |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| ![Tracker in the dark theme](docs/screenshots/dashboard-dark.png) | <img src="docs/screenshots/dashboard-mobile.png" alt="Tracker on a phone" width="260" /> |
+
 ## Features
 
 **Tracking**
@@ -13,8 +25,8 @@ A React app for keeping track of job applications. You log each application, mov
 - Add, edit and delete applications with title, company, location, the date you applied and a status
 - Interview date and time fields that appear when the status is Interview. A past interview stays on record after the job moves on to Offer or Rejected
 - Search by job title or company, filter by status or by date
-- Color coded status on each card
-- Form errors shown next to the form, and a confirmation before deleting
+- Color coded status badge on each card, summary numbers at the top and a message when a list is empty
+- Visible labels, an error message under each field that needs fixing, and a confirmation before deleting
 
 **Reminders**
 
@@ -23,8 +35,8 @@ A React app for keeping track of job applications. You log each application, mov
 
 **Analytics**
 
-- Bar chart or pie chart of interviews, rejections and offers (switchable)
-- Line chart of interviews over time
+- Applications by status as a bar chart, donut chart or table (switchable)
+- Running total of interviews over time, or a simple list until there are enough interview days for a trend
 - Totals and the date range of your applications
 - Suggestions based on your numbers, for example a nudge to follow up when several applications are still waiting
 
@@ -42,16 +54,17 @@ A React app for keeping track of job applications. You log each application, mov
 
 **Other**
 
-- Responsive layout with a collapsible menu on small screens
-- Labels for screen readers and keyboard access to the menu and chatbot
-- Help chatbot that answers questions about adding jobs, reminders, exports, backups, analytics and where data is kept
+- Light and dark theme that follows the system setting, with a switch in the navigation bar
+- Responsive layout from 375px phones to wide screens, with a collapsible menu on small screens
+- Help chat behind a round button in the corner, with one tap quick questions about adding jobs, reminders, exports, backups, analytics and where data is kept
 - A recovery page instead of a blank screen if something fails, and a not found page for unknown addresses
 
 ## Tech stack
 
 | Area     | Tools                                                    |
 | -------- | -------------------------------------------------------- |
-| UI       | React 19 with hooks                                      |
+| UI       | React 19 with hooks, Lucide icons, Plus Jakarta Sans     |
+| Styling  | Plain CSS with design tokens (CSS variables)             |
 | Routing  | React Router 7 (HashRouter, so it works on GitHub Pages) |
 | Charts   | Recharts                                                 |
 | Export   | ExcelJS, jsPDF with jspdf-autotable, FileSaver           |
@@ -62,7 +75,17 @@ A React app for keeping track of job applications. You log each application, mov
 | Quality  | ESLint, Prettier, GitHub Actions                         |
 | Hosting  | GitHub Pages                                             |
 
-The Analytics page and the export libraries are loaded only when they're needed, so the first page load is about 250 kB (81 kB gzipped).
+The Analytics page and the export libraries are loaded only when they're needed, so the first page load is about 290 kB of JavaScript (91 kB gzipped).
+
+## Design
+
+The interface is a clean, flat style suited to a productivity tool: white cards on a light slate background, a professional blue as the main color and one colored badge per status.
+
+- **Design tokens.** Colors, type sizes, spacing, radius and motion are CSS variables in `src/styles/tokens.css`. Components never use raw colors, so the dark theme is a second set of values in the same file.
+- **Contrast.** Every text and background pair meets WCAG AA (at least 4.5:1) in both themes.
+- **Accessibility.** Visible labels on every field, errors under the field they belong to, visible keyboard focus, 44px touch targets, screen reader names on icon buttons, focus moved to the right place when menus and dialogs open or close, and charts that can be read as a table.
+- **Motion.** Short transitions only. People who ask their system for reduced motion get no animations, charts included.
+- **Shared pieces.** Buttons, fields, cards, alerts and badges live in `src/styles/base.css`; each component and page keeps its own small stylesheet next to it.
 
 ## How it works
 
@@ -90,6 +113,7 @@ Everything is kept in the visitor's browser under keys that start with `jobTrack
 | `jobTracker.users`        | Accounts: email, salt and password hash       |
 | `jobTracker.session`      | Email of the account that is logged in        |
 | `jobTracker.jobs.<email>` | That account's applications                   |
+| `jobTracker.theme`        | `light` or `dark`, once the visitor picks one |
 
 Each application looks like this:
 
@@ -147,7 +171,7 @@ The app opens at http://localhost:3000/job-application-tracker/.
 npm test
 ```
 
-There are 87 tests. They cover the storage service and its migration from the first version, password hashing, backup validation and restore, date parsing and formatting, interview reminders, search and filters, the analytics suggestions, the chatbot replies, the job form, the error page, and the main flows in the app: separate data per account, refusing a duplicate email, staying logged in after a reload, upgrading old passwords, and the not found page.
+There are 95 tests. They cover the storage service and its migration from the first version, password hashing, backup validation and restore, date parsing and formatting, interview reminders, search and filters, the analytics suggestions, the help chat, the offer messages, the job form (including error messages and focus), the error page, and the main flows in the app: separate data per account, refusing a duplicate email, staying logged in after a reload, upgrading old passwords, switching themes and the not found page.
 
 ## Continuous integration and deployment
 
@@ -162,22 +186,29 @@ For the deploy workflow to publish, the repository's Pages source must be set to
 
 ```
 .github/workflows/        CI and deploy workflows
+docs/screenshots/         images used in this README
 public/                   favicon, icons and web manifest
 src/
   components/
     BackupControls.jsx    download and restore backups
-    Chatbot.jsx           help chatbot in the corner of every page
+    Chatbot.jsx           help chat in the corner of every page
+    EmptyState.jsx        message shown when a list or chart is empty
     ErrorBoundary.jsx     recovery page when something fails
+    Footer.jsx
     JobForm.jsx           add and edit form with validation
     JobList.jsx           application cards
-    Navbar.jsx            top navigation with mobile menu
+    Navbar.jsx            top navigation, theme switch and mobile menu
+    PasswordInput.jsx     password field with show and hide
     ProtectedRoute.jsx    sends logged out visitors to the login page
-    StatusPopup.jsx       message shown for offers
+    StatCard.jsx          summary number with an icon
+    StatusPopup.jsx       offer toast and accepted offer dialog
   constants/
     statuses.js           the list of statuses, used everywhere
   hooks/
     useAuth.js            register, log in, log out, session
     useJobs.js            the logged in account's applications
+    useTheme.js           light or dark theme
+    usePrefersReducedMotion.js
   pages/
     Home.jsx
     Dashboard.jsx         tracker, search, filters, reminders, export, backup
@@ -188,6 +219,9 @@ src/
     NotFound.jsx
   services/
     storage.js            all reads and writes to localStorage
+  styles/
+    tokens.css            colors, type, spacing and the dark theme
+    base.css              buttons, fields, cards, alerts, badges
   utils/                  dates, filters, reminders, suggestions, exports,
                           backups, validation, password hashing, migration,
                           chatbot replies
@@ -199,7 +233,7 @@ vite.config.js
 eslint.config.js
 ```
 
-Tests sit next to the file they test, for example `services/storage.test.js`.
+Tests and stylesheets sit next to the file they belong to, for example `services/storage.test.js` and `pages/Dashboard.css`.
 
 ## License
 
