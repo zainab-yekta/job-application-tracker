@@ -95,7 +95,7 @@ function Workspace({ auth }) {
           path="/analytics"
           element={
             <ProtectedRoute isLoggedIn={auth.isLoggedIn}>
-              <Suspense fallback={<p className="empty-message">Loading analytics…</p>}>
+              <Suspense fallback={<p className="page-loading">Loading analytics…</p>}>
                 <Analytics jobs={jobs} />
               </Suspense>
             </ProtectedRoute>

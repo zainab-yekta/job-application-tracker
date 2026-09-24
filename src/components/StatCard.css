@@ -1,0 +1,66 @@
+/* Summary numbers */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+.stat-primary .stat-icon {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.stat-applied .stat-icon {
+  background-color: var(--status-applied-bg);
+  color: var(--status-applied-fg);
+}
+
+.stat-interview .stat-icon {
+  background-color: var(--status-interview-bg);
+  color: var(--status-interview-fg);
+}
+
+.stat-offer .stat-icon {
+  background-color: var(--status-offer-bg);
+  color: var(--status-offer-fg);
+}
+
+.stat-value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+.stat-rejected .stat-icon {
+  background-color: var(--status-rejected-bg);
+  color: var(--status-rejected-fg);
+}

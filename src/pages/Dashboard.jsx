@@ -16,39 +16,14 @@ import {
 import JobList from '../components/JobList';
 import JobForm from '../components/JobForm';
 import BackupControls from '../components/BackupControls';
+import StatCard from '../components/StatCard';
+import EmptyState from '../components/EmptyState';
 import { formatDisplayDate } from '../utils/formatDate';
 import { getUpcomingInterviews } from '../utils/reminders';
 import { filterJobs } from '../utils/filterJobs';
 import { exportToExcel, exportToPDF } from '../utils/exportJobs';
 import { STATUSES, isOfferStatus } from '../constants/statuses';
 import './Dashboard.css';
-
-function StatCard({ icon: Icon, label, value, tone }) {
-  return (
-    <div className={`stat-card card stat-${tone}`}>
-      <span className="stat-icon" aria-hidden="true">
-        <Icon size={20} />
-      </span>
-      <div>
-        <p className="stat-value">{value}</p>
-        <p className="stat-label">{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function EmptyState({ icon: Icon, title, text, action }) {
-  return (
-    <div className="empty-state card">
-      <span className="empty-state-icon" aria-hidden="true">
-        <Icon size={28} />
-      </span>
-      <h3>{title}</h3>
-      <p>{text}</p>
-      {action}
-    </div>
-  );
-}
 
 function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
   const [jobToEdit, setJobToEdit] = useState(null);

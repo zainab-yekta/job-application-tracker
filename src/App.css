@@ -1,20 +1,20 @@
 /* Styles for pages that have not moved to the design system yet. Global
    element rules are scoped to those pages so they do not leak into new ones. */
-:where(.about-page, .analytics-page, .status-page, .congrats-popup2) h1 {
+:where(.about-page, .status-page, .congrats-popup2) h1 {
   text-align: center;
   padding-top: 1rem;
   margin-top: 20px;
   color: #333;
 }
 
-:where(.about-page, .analytics-page, .status-page, .congrats-popup2) :is(input, select, button) {
+:where(.about-page, .status-page, .congrats-popup2) :is(input, select, button) {
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
 }
 
-:where(.about-page, .analytics-page, .status-page, .congrats-popup2) button {
+:where(.about-page, .status-page, .congrats-popup2) button {
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   border: none;
@@ -24,7 +24,7 @@
   transition: background-color 0.2s;
 }
 
-:where(.about-page, .analytics-page, .status-page, .congrats-popup2) button:hover {
+:where(.about-page, .status-page, .congrats-popup2) button:hover {
   background-color: #0056b3;
 }
 
@@ -46,38 +46,11 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.analytics-section {
-  background: #fff;
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
 .about-page {
   padding: 2rem;
   max-width: 800px;
   margin: auto;
   text-align: center;
-}
-
-.analytics-page {
-  padding: 20px;
-}
-
-.chart-toggle {
-  margin-bottom: 10px;
-}
-
-.analytics-section .analytics-stats {
-  margin-top: 20px;
-}
-
-.suggestions-box {
-  margin-top: 30px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
 }
 
 .empty-message {
