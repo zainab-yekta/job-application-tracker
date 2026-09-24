@@ -116,7 +116,12 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         </p>
       )}
 
-      <JobList jobs={filteredJobs} onDelete={handleDelete} onEdit={setJobToEdit} />
+      <JobList
+        jobs={filteredJobs}
+        onDelete={handleDelete}
+        onEdit={setJobToEdit}
+        emptyMessage={jobs.length > 0 ? 'No applications match your search or filters.' : undefined}
+      />
     </div>
   );
 }

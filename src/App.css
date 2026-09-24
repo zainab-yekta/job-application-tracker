@@ -502,3 +502,34 @@ html {
   min-height: 100vh;
   background-color: #f0f2f5;
 }
+
+/* Page and section styles (moved from inline styles) */
+.about-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+.analytics-page {
+  padding: 20px;
+}
+
+.chart-toggle {
+  margin-bottom: 10px;
+}
+
+.analytics-section .analytics-stats {
+  margin-top: 20px;
+}
+
+.suggestions-box {
+  margin-top: 30px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+}
+
+.empty-message {
+  text-align: center;
+}

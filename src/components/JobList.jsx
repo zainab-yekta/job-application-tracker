@@ -2,9 +2,9 @@ import React from 'react';
 import { formatDisplayDate } from '../utils/formatDate';
 import { statusClassName } from '../constants/statuses';
 
-function JobList({ jobs, onDelete, onEdit }) {
+function JobList({ jobs, onDelete, onEdit, emptyMessage = 'No job applications added yet.' }) {
   if (jobs.length === 0) {
-    return <p style={{ textAlign: 'center' }}>No job applications added yet.</p>;
+    return <p className="empty-message">{emptyMessage}</p>;
   }
 
   return (

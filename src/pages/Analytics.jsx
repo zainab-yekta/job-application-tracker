@@ -71,10 +71,10 @@ function Analytics({ jobs }) {
   });
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="analytics-page">
       <div className="analytics-section">
         <h2>📊 Job Application Summary</h2>
-        <button onClick={toggleChart} style={{ marginBottom: '10px' }}>
+        <button onClick={toggleChart} className="chart-toggle">
           Switch to {chartType === 'bar' ? 'Pie Chart' : 'Bar Chart'}
         </button>
         <ResponsiveContainer width="100%" height={300}>
@@ -110,7 +110,7 @@ function Analytics({ jobs }) {
           )}
         </ResponsiveContainer>
 
-        <div style={{ marginTop: '20px' }} className="analytics-stats">
+        <div className="analytics-stats">
           <p>
             📩 <strong>Total Jobs Applied:</strong> {totalApplied}
           </p>
@@ -146,14 +146,7 @@ function Analytics({ jobs }) {
         )}
       </div>
       {suggestions.length > 0 && (
-        <div
-          style={{
-            marginTop: '30px',
-            padding: '15px',
-            border: '1px solid #ccc',
-            backgroundColor: '#f5f5f5',
-          }}
-        >
+        <div className="suggestions-box">
           <h3>🧠 Smart Suggestions</h3>
           <ul>
             {suggestions.map((text) => (

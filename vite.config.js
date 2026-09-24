@@ -5,6 +5,10 @@ export default defineConfig({
   // GitHub Pages serves the site from /job-application-tracker/
   base: '/job-application-tracker/',
   plugins: [react()],
+  build: {
+    // ExcelJS is about 900 kB on its own; it only loads when a user exports
+    chunkSizeWarningLimit: 1000,
+  },
   server: {
     port: 3000,
     open: true,

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
@@ -14,6 +13,9 @@ import { useJobs } from './hooks/useJobs';
 import { useAuth } from './hooks/useAuth';
 import { isOfferStatus } from './constants/statuses';
 import './App.css';
+
+// The chart library is large, so the Analytics page loads on first visit
+const Analytics = lazy(() => import('./pages/Analytics'));
 
 function App() {
   const { jobs, addJob, updateJob, deleteJob, clearJobs } = useJobs();
@@ -79,7 +81,9 @@ function App() {
             path="/analytics"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Analytics jobs={jobs} />
+                <Suspense fallback={<p className="empty-message">Loading analytics…</p>}>
+                  <Analytics jobs={jobs} />
+                </Suspense>
               </ProtectedRoute>
             }
           />
