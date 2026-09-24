@@ -1,14 +1,16 @@
 import React, { useState, lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
+import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Chatbot from './components/Chatbot';
 import StatusPopup from './components/StatusPopup';
+import ErrorBoundary from './components/ErrorBoundary';
 import { useJobs } from './hooks/useJobs';
 import { useAuth } from './hooks/useAuth';
 import { isOfferStatus } from './constants/statuses';
@@ -98,10 +100,15 @@ function Workspace({ auth }) {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
+}
+
+function PageErrorBoundary({ children }) {
+  const { pathname } = useLocation();
+  return <ErrorBoundary resetKey={pathname}>{children}</ErrorBoundary>;
 }
 
 function App() {
@@ -110,7 +117,9 @@ function App() {
   return (
     <Router>
       <Navbar isLoggedIn={auth.isLoggedIn} onLogout={auth.logout} />
-      <Workspace key={auth.user ?? 'guest'} auth={auth} />
+      <PageErrorBoundary>
+        <Workspace key={auth.user ?? 'guest'} auth={auth} />
+      </PageErrorBoundary>
       <Chatbot />
     </Router>
   );

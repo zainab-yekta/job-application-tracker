@@ -37,6 +37,12 @@ describe('App', () => {
     window.location.hash = '';
   });
 
+  it('shows a not found page for unknown addresses', async () => {
+    openAt('#/no-such-page');
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Go to the home page' })).toBeInTheDocument();
+  });
+
   it('sends logged out visitors from the dashboard to the login page', async () => {
     openAt('#/dashboard');
     expect(await screen.findByRole('heading', { name: 'Login' })).toBeInTheDocument();

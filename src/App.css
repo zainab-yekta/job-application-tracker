@@ -552,3 +552,27 @@ html {
   color: #0a6847;
   font-size: 0.9rem;
 }
+
+/* 404 and error pages */
+.status-page {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 2rem;
+  text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.status-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.status-page-actions a {
+  color: #007bff;
+}
