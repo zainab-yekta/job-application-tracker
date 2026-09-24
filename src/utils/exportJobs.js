@@ -21,7 +21,7 @@ const toRow = (job) => ({
 });
 
 // e.g. "JOBs 24.09.2026"
-export function exportFileName(now = new Date()) {
+function exportFileName(now = new Date()) {
   const pad = (n) => String(n).padStart(2, '0');
   return `JOBs ${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
 }

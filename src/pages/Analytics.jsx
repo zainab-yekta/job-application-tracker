@@ -204,7 +204,7 @@ function Analytics({ jobs }) {
   const rejectedCount = countOf('Rejected');
   const offerCount = jobs.filter((job) => isOfferStatus(job.status)).length;
 
-  // Largest first, as recommended for comparing categories
+  // Largest first so the bars are easy to compare
   const statusData = STATUSES.map((status) => ({
     name: status,
     value: countOf(status),

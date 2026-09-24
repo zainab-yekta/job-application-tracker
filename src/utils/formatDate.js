@@ -1,5 +1,3 @@
-// src/utils/formatDate.js
-
 // Dates are stored as 'YYYY-MM-DD'. new Date('YYYY-MM-DD') treats that as UTC
 // midnight, which shows the previous day in timezones west of UTC, so parse the
 // parts and build a local date instead.

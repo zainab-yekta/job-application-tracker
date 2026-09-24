@@ -28,13 +28,13 @@ import './Dashboard.css';
 
 function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
   const [jobToEdit, setJobToEdit] = useState(null);
-  const formPanelRef = useRef(null);
-  const reduceMotion = usePrefersReducedMotion();
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [showNotification, setShowNotification] = useState(true);
   const [exportError, setExportError] = useState('');
+  const formPanelRef = useRef(null);
+  const reduceMotion = usePrefersReducedMotion();
 
   const notificationJobs = useMemo(() => getUpcomingInterviews(jobs), [jobs]);
   const filteredJobs = filterJobs(jobs, { status: filter, search: searchTerm, date: dateFilter });

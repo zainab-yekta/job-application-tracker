@@ -7,9 +7,6 @@
   --color-primary-hover: #075985;
   --color-primary-soft: #e0f2fe;
   --color-on-primary: #ffffff;
-  --color-accent: #15803d;
-  --color-accent-hover: #166534;
-  --color-on-accent: #ffffff;
 
   /* Surfaces and text */
   --color-bg: #f8fafc;
@@ -106,9 +103,6 @@
   --color-primary-hover: #7dd3fc;
   --color-primary-soft: rgba(56, 189, 248, 0.15);
   --color-on-primary: #082f49;
-  --color-accent: #4ade80;
-  --color-accent-hover: #86efac;
-  --color-on-accent: #052e16;
 
   --color-bg: #0b1220;
   --color-surface: #111a2e;
