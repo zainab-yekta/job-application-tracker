@@ -37,6 +37,21 @@ describe('App', () => {
     window.location.hash = '';
   });
 
+  it('switches to the dark theme and remembers the choice', async () => {
+    const user = userEvent.setup();
+    const { unmount } = openAt('#/');
+
+    await user.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(localStorage.getItem('jobTracker.theme')).toBe('"dark"');
+    unmount();
+
+    openAt('#/');
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    await user.click(screen.getByRole('button', { name: 'Switch to light theme' }));
+    expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
   it('shows a not found page for unknown addresses', async () => {
     openAt('#/no-such-page');
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();

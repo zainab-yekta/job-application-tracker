@@ -7,6 +7,7 @@
 //   jobTracker.users          { [email]: { email, salt, passwordHash, createdAt } }
 //   jobTracker.session        { email } of the logged in user
 //   jobTracker.jobs.<email>   that user's applications
+//   jobTracker.theme          "light" or "dark" when the visitor picked one
 //   jobTracker.unclaimedJobs  jobs saved before accounts had their own lists,
 //                             given to the next account that registers
 import { migrateJob } from '../utils/migrateJob';
@@ -19,6 +20,7 @@ const KEYS = {
   users: `${PREFIX}.users`,
   session: `${PREFIX}.session`,
   unclaimedJobs: `${PREFIX}.unclaimedJobs`,
+  theme: `${PREFIX}.theme`,
   jobs: (email) => `${PREFIX}.jobs.${email}`,
 };
 
@@ -132,4 +134,15 @@ export function claimUnclaimedJobs(email) {
   if (!Array.isArray(jobs) || jobs.length === 0) return;
   saveJobs(email, [...loadJobs(email), ...jobs.map(migrateJob)]);
   remove(KEYS.unclaimedJobs);
+}
+
+// Theme (index.html also reads this key before the app starts, to avoid a flash)
+
+export function getThemePreference() {
+  const theme = read(KEYS.theme, null);
+  return theme === 'light' || theme === 'dark' ? theme : null;
+}
+
+export function saveThemePreference(theme) {
+  return write(KEYS.theme, theme);
 }

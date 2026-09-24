@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Briefcase, Menu, X, LogOut } from 'lucide-react';
+import { Briefcase, Menu, Moon, Sun, X, LogOut } from 'lucide-react';
 import './Navbar.css';
 
-function Navbar({ isLoggedIn, onLogout }) {
+function Navbar({ isLoggedIn, onLogout, theme, onToggleTheme }) {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -33,17 +33,6 @@ function Navbar({ isLoggedIn, onLogout }) {
           </span>
           JobTracker
         </Link>
-
-        <button
-          type="button"
-          className="btn btn-ghost btn-icon navbar-toggle"
-          onClick={() => setIsOpen((open) => !open)}
-          aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={isOpen}
-          aria-controls="navbar-menu"
-        >
-          {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-        </button>
 
         <div id="navbar-menu" className={`navbar-menu${isOpen ? ' is-open' : ''}`}>
           <ul className="navbar-links">
@@ -91,6 +80,30 @@ function Navbar({ isLoggedIn, onLogout }) {
             )}
           </div>
         </div>
+        <button
+          type="button"
+          className="btn btn-ghost btn-icon navbar-theme"
+          onClick={onToggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          title={theme === 'dark' ? 'Light theme' : 'Dark theme'}
+        >
+          {theme === 'dark' ? (
+            <Sun size={20} aria-hidden="true" />
+          ) : (
+            <Moon size={20} aria-hidden="true" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          className="btn btn-ghost btn-icon navbar-toggle"
+          onClick={() => setIsOpen((open) => !open)}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+          aria-controls="navbar-menu"
+        >
+          {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+        </button>
       </nav>
     </header>
   );

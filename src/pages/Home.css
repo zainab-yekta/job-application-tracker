@@ -284,7 +284,8 @@
 }
 
 .home-cta p {
-  color: var(--color-primary-soft);
+  color: var(--color-on-primary);
+  opacity: 0.9;
 }
 
 .home-cta .btn-primary {

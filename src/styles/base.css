@@ -166,16 +166,6 @@ textarea {
   color: var(--color-fg);
 }
 
-.btn-danger {
-  background-color: var(--color-danger);
-  color: #ffffff;
-}
-
-.btn-danger:hover:not(:disabled) {
-  background-color: var(--color-danger-hover);
-  color: #ffffff;
-}
-
 .btn-lg {
   min-height: 52px;
   padding: 0 var(--space-6);

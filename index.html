@@ -18,6 +18,20 @@
     <link rel="apple-touch-icon" href="%BASE_URL%logo192.png" />
     <link rel="manifest" href="%BASE_URL%manifest.json" />
     <title>Job Application Tracker</title>
+    <script>
+      // Apply the light or dark theme before the page is drawn, so there is no
+      // flash of the wrong colors. Same key as getThemePreference in storage.js.
+      (function () {
+        var theme = null;
+        try {
+          theme = JSON.parse(localStorage.getItem('jobTracker.theme'));
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

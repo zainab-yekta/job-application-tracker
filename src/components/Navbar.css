@@ -75,6 +75,16 @@
   color: var(--color-primary-hover);
 }
 
+.navbar-theme {
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .navbar-theme {
+    margin-left: var(--space-2);
+  }
+}
+
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -98,6 +108,10 @@
 
 /* Mobile: the menu drops down under the bar */
 @media (max-width: 767px) {
+  .navbar-inner {
+    gap: var(--space-1);
+  }
+
   .navbar-menu {
     display: none;
     position: absolute;

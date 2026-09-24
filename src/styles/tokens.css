@@ -98,3 +98,57 @@
 
   color-scheme: light;
 }
+
+/* Dark theme. index.html sets data-theme before the first paint (from the saved
+   choice, or the system setting), so there is no flash of the light theme. */
+:root[data-theme='dark'] {
+  --color-primary: #38bdf8;
+  --color-primary-hover: #7dd3fc;
+  --color-primary-soft: rgba(56, 189, 248, 0.15);
+  --color-on-primary: #082f49;
+  --color-accent: #4ade80;
+  --color-accent-hover: #86efac;
+  --color-on-accent: #052e16;
+
+  --color-bg: #0b1220;
+  --color-surface: #111a2e;
+  --color-surface-muted: #1a2540;
+  --color-fg: #e2e8f0;
+  --color-fg-muted: #94a3b8;
+  --color-fg-subtle: #8292a8;
+  --color-border: #243049;
+  --color-border-strong: #334155;
+  --color-ring: #38bdf8;
+
+  --color-danger: #f87171;
+  --color-danger-hover: #fca5a5;
+  --color-danger-soft: rgba(239, 68, 68, 0.12);
+  --color-success: #4ade80;
+  --color-success-soft: rgba(34, 197, 94, 0.12);
+  --color-warning-fg: #fcd34d;
+  --color-warning-soft: rgba(245, 158, 11, 0.12);
+  --color-warning-border: rgba(245, 158, 11, 0.35);
+
+  --status-applied-fg: #7dd3fc;
+  --status-applied-bg: rgba(56, 189, 248, 0.15);
+  --status-interview-fg: #fcd34d;
+  --status-interview-bg: rgba(245, 158, 11, 0.15);
+  --status-rejected-fg: #fca5a5;
+  --status-rejected-bg: rgba(239, 68, 68, 0.15);
+  --status-offer-fg: #86efac;
+  --status-offer-bg: rgba(34, 197, 94, 0.15);
+  --status-accepted-fg: #c4b5fd;
+  --status-accepted-bg: rgba(139, 92, 246, 0.18);
+
+  --chart-1: #38bdf8;
+  --chart-2: #f59e0b;
+  --chart-3: #f87171;
+  --chart-4: #4ade80;
+  --chart-5: #a78bfa;
+  --chart-grid: #243049;
+  --chart-axis: #94a3b8;
+
+  --shadow-overlay: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}

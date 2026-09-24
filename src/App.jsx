@@ -14,6 +14,7 @@ import StatusPopup from './components/StatusPopup';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useJobs } from './hooks/useJobs';
 import { useAuth } from './hooks/useAuth';
+import { useTheme } from './hooks/useTheme';
 import { isOfferStatus } from './constants/statuses';
 
 // The chart library is large, so the Analytics page loads on first visit
@@ -113,11 +114,17 @@ function PageErrorBoundary({ children }) {
 
 function App() {
   const auth = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Router>
       <div className="app-shell">
-        <Navbar isLoggedIn={auth.isLoggedIn} onLogout={auth.logout} />
+        <Navbar
+          isLoggedIn={auth.isLoggedIn}
+          onLogout={auth.logout}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
         <div className="app-main">
           <PageErrorBoundary>
             <Workspace key={auth.user ?? 'guest'} auth={auth} />
