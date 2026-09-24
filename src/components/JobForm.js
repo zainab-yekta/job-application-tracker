@@ -1,35 +1,41 @@
 import React, { useState, useEffect } from 'react';
 
-function JobForm({ onAdd, onUpdate, jobToEdit, onSubmit }) {
-  const [title, setTitle] = useState('');
-  const [company, setCompany] = useState('');
-  const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
-  const [status, setStatus] = useState('Applied'); // default
-  const [interviewTime, setInterviewTime] = useState('');
+const EMPTY_FORM = {
+  title: '',
+  company: '',
+  location: '',
+  date: '',
+  status: 'Applied',
+  interviewTime: '',
+};
+
+function JobForm({ jobToEdit, onSubmit, onCancel }) {
+  const [form, setForm] = useState(EMPTY_FORM);
 
   useEffect(() => {
     if (jobToEdit) {
-      setTitle(jobToEdit.title);
-      setCompany(jobToEdit.company);
-      setLocation(jobToEdit.location);
-      setDate(jobToEdit.date);
-      setStatus(jobToEdit.status);
-      setInterviewTime(jobToEdit.interviewTime || '');
-    } 
-    else {
-      // reset form
-      setTitle('');
-      setCompany('');
-      setStatus('Applied');
-      setDate('');
-      setInterviewTime('');
+      setForm({
+        title: jobToEdit.title || '',
+        company: jobToEdit.company || '',
+        location: jobToEdit.location || '',
+        date: jobToEdit.date || '',
+        status: jobToEdit.status || 'Applied',
+        interviewTime: jobToEdit.interviewTime || '',
+      });
+    } else {
+      setForm(EMPTY_FORM);
     }
   }, [jobToEdit]);
 
+  const handleChange = (field) => (e) => {
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !company || !date) {
+    const { title, company, location, date, status, interviewTime } = form;
+
+    if (!title.trim() || !company.trim() || !date) {
       alert('Please fill in title, company and date');
       return;
     }
@@ -38,25 +44,16 @@ function JobForm({ onAdd, onUpdate, jobToEdit, onSubmit }) {
       return;
     }
 
-    const jobData = {
+    onSubmit({
       id: jobToEdit ? jobToEdit.id : Date.now(),
-      title,
-      company,
-      location,
-      date,       // we continue using `date` as interview date
+      title: title.trim(),
+      company: company.trim(),
+      location: location.trim(),
+      date,
       status,
       interviewTime: status === 'Interview' ? interviewTime : '',
-    };
-
-    //jobToEdit ? onUpdate(jobData) : onAdd(jobData);
-    onSubmit(jobData);
-
-    // Reset form
-    setTitle('');
-    setCompany('');
-    setLocation('');
-    setDate('');
-    setStatus('Applied');
+    });
+    setForm(EMPTY_FORM);
   };
 
   return (
@@ -64,27 +61,27 @@ function JobForm({ onAdd, onUpdate, jobToEdit, onSubmit }) {
       <input
         type="text"
         placeholder="Job Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={form.title}
+        onChange={handleChange('title')}
       />
       <input
         type="text"
         placeholder="Company"
-        value={company}
-        onChange={(e) => setCompany(e.target.value)}
+        value={form.company}
+        onChange={handleChange('company')}
       />
       <input
         type="text"
         placeholder="Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        value={form.location}
+        onChange={handleChange('location')}
       />
       <input
         type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
+        value={form.date}
+        onChange={handleChange('date')}
       />
-      <select value={status} onChange={(e) => setStatus(e.target.value)}>
+      <select value={form.status} onChange={handleChange('status')}>
         <option value="Applied">Applied</option>
         <option value="Interview">Interview</option>
         <option value="Rejected">Rejected</option>
@@ -92,15 +89,18 @@ function JobForm({ onAdd, onUpdate, jobToEdit, onSubmit }) {
         <option value="Accepted Offer">Accepted Offer</option>
       </select>
       {/* Time input only if status is Interview */}
-      {status === 'Interview' && (
+      {form.status === 'Interview' && (
         <input
           type="time"
-          value={interviewTime}
-          onChange={(e) => setInterviewTime(e.target.value)}
-          required={status === 'Interview'}
+          value={form.interviewTime}
+          onChange={handleChange('interviewTime')}
+          required
         />
       )}
       <button type="submit">{jobToEdit ? 'Save' : 'Add Job'}</button>
+      {jobToEdit && (
+        <button type="button" onClick={onCancel}>Cancel</button>
+      )}
     </form>
   );
 }

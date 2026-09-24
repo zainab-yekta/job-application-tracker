@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { formatDisplayDate } from '../utils/FormatDate'; 
+import { formatDisplayDate, parseLocalDate } from '../utils/FormatDate';
 
 function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
   
@@ -19,18 +19,13 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
 
   
   useEffect(() => {
-    // For interview notification
-    const today = new Date();
+    // Remind about interviews still to come today or tomorrow
+    const now = new Date();
+    const endOfTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
     const upcoming = jobs.filter((job) => {
-      const interview = new Date(job.date);
-      //const timeDiff = (interview - today) / (1000 * 60 * 60 * 24);
-      return (
-        job.status.toLowerCase() === "interview" &&
-        interview instanceof Date &&
-        !isNaN(interview) &&
-        (interview - today) / (1000 * 60 * 60 * 24) <= 1 &&
-        (interview - today) / (1000 * 60 * 60 * 24) >= 0
-      );
+      if (job.status !== 'Interview') return false;
+      const interview = parseLocalDate(job.date, job.interviewTime);
+      return interview && interview >= now && interview < endOfTomorrow;
     });
 
     setNotificationJobs(upcoming);
@@ -38,6 +33,22 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
 
   const editJob = (job) => {
     setJobToEdit(job);
+  };
+
+  const handleSubmit = (job) => {
+    if (jobToEdit) {
+      onUpdate(job);
+      setJobToEdit(null);
+    } else {
+      onAdd(job);
+    }
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Delete this application?')) {
+      onDelete(id);
+      if (jobToEdit?.id === id) setJobToEdit(null);
+    }
   };
 
   //export Excel file
@@ -109,11 +120,12 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
     doc.save(`JOBs ${dateStr}.pdf`);
   };
 
+  const search = searchTerm.trim().toLowerCase();
   const filteredJobs = jobs.filter((job) => {
     const matchesStatus = filter === 'All' || job.status === filter;
     const matchesSearch =
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchTerm.toLowerCase());
+      (job.title || '').toLowerCase().includes(search) ||
+      (job.company || '').toLowerCase().includes(search);
     const matchesDate = !dateFilter || job.date === dateFilter;
 
     return matchesStatus && matchesSearch && matchesDate;
@@ -150,13 +162,11 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
       </div>
 
       
-      <JobForm onSubmit={(job) => { if (jobToEdit) { onUpdate(job, () => setJobToEdit(null)); // ✅ Reset form after update
-        } else {
-          onAdd(job);
-        }
-      }}
-    jobToEdit={jobToEdit}
-/>
+      <JobForm
+        onSubmit={handleSubmit}
+        onCancel={() => setJobToEdit(null)}
+        jobToEdit={jobToEdit}
+      />
 
 
       <div className="status-filter">
@@ -171,6 +181,7 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
           <option value="Interview">Interview</option>
           <option value="Rejected">Rejected</option>
           <option value="Offer">Offer</option>
+          <option value="Accepted Offer">Accepted Offer</option>
         </select>
       </div>
 
@@ -188,7 +199,7 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
         <button onClick={handleExportPDF}>Export to PDF</button>
       </div>
 
-      <JobList jobs={filteredJobs} onDelete={onDelete} onEdit={editJob} />
+      <JobList jobs={filteredJobs} onDelete={handleDelete} onEdit={editJob} />
     </div>
   );
 }
