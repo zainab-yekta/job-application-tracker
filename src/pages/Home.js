@@ -9,8 +9,8 @@ function Home() {
         Track your job applications, interviews, and offers — all in one place.
       </p>
 
-      <Link to="/register">
-        <button className="get-started-btn">Get Started</button>
+      <Link to="/register" className="get-started-btn">
+        Get Started
       </Link>
 
       <div className="home-features">
@@ -30,7 +30,7 @@ function Home() {
         </p>
 
         <p>
-          Want to know more? Visit our <Link to="/about">About</Link> or <Link to="/contact">Contact</Link> page.
+          Want to know more? Visit the <Link to="/about">About</Link> page.
         </p>
       </div>
     </div>
