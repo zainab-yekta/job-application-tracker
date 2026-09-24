@@ -68,7 +68,7 @@ function OfferToast({ job, onClose }) {
         type="button"
         className="btn btn-ghost btn-icon"
         onClick={onClose}
-        aria-label="Dismiss"
+        aria-label="Dismiss offer message"
       >
         <X size={18} aria-hidden="true" />
       </button>

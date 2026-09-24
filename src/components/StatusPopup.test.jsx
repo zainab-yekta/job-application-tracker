@@ -14,7 +14,7 @@ describe('StatusPopup', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent('Congratulations on the offer!');
     expect(screen.getByRole('status')).toHaveTextContent('UI Engineer at Slack');
-    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss offer message' }));
     expect(onClose).toHaveBeenCalled();
   });
 
