@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const EMPTY_FORM = {
   title: '',
@@ -9,23 +9,22 @@ const EMPTY_FORM = {
   interviewTime: '',
 };
 
-function JobForm({ jobToEdit, onSubmit, onCancel }) {
-  const [form, setForm] = useState(EMPTY_FORM);
+const toFormValues = (job) =>
+  job
+    ? {
+        title: job.title || '',
+        company: job.company || '',
+        location: job.location || '',
+        date: job.date || '',
+        status: job.status || 'Applied',
+        interviewTime: job.interviewTime || '',
+      }
+    : EMPTY_FORM;
 
-  useEffect(() => {
-    if (jobToEdit) {
-      setForm({
-        title: jobToEdit.title || '',
-        company: jobToEdit.company || '',
-        location: jobToEdit.location || '',
-        date: jobToEdit.date || '',
-        status: jobToEdit.status || 'Applied',
-        interviewTime: jobToEdit.interviewTime || '',
-      });
-    } else {
-      setForm(EMPTY_FORM);
-    }
-  }, [jobToEdit]);
+// The parent gives this form a `key` based on the job being edited,
+// so React creates a fresh form whenever editing starts or ends.
+function JobForm({ jobToEdit, onSubmit, onCancel }) {
+  const [form, setForm] = useState(() => toFormValues(jobToEdit));
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));

@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import JobList from '../components/JobList';
 import JobForm from '../components/JobForm';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { formatDisplayDate, parseLocalDate } from '../utils/FormatDate';
+import { formatDisplayDate } from '../utils/FormatDate';
+import { getUpcomingInterviews } from '../utils/reminders';
 
 function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
-  
   const [jobToEdit, setJobToEdit] = useState(null);
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
-  const [notificationJobs, setNotificationJobs] = useState([]);
   const [showNotification, setShowNotification] = useState(true);
 
-  
-  useEffect(() => {
-    // Remind about interviews still to come today or tomorrow
-    const now = new Date();
-    const endOfTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
-    const upcoming = jobs.filter((job) => {
-      if (job.status !== 'Interview') return false;
-      const interview = parseLocalDate(job.date, job.interviewTime);
-      return interview && interview >= now && interview < endOfTomorrow;
-    });
-
-    setNotificationJobs(upcoming);
-  }, [jobs]);
+  const notificationJobs = useMemo(() => getUpcomingInterviews(jobs), [jobs]);
 
   const editJob = (job) => {
     setJobToEdit(job);
@@ -162,6 +149,7 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
 
       
       <JobForm
+        key={jobToEdit ? jobToEdit.id : 'new'}
         onSubmit={handleSubmit}
         onCancel={() => setJobToEdit(null)}
         jobToEdit={jobToEdit}
