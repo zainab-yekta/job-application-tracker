@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/zainab-yekta/job-application-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/zainab-yekta/job-application-tracker/actions/workflows/ci.yml)
 
-A React app for keeping track of job applications. You log each application, move it through its stages (Applied, Interview, Rejected, Offer, Accepted Offer), get a reminder before interviews, and see how your search is going on an analytics page. Everything runs in the browser.
+A React app for keeping track of job applications. You log each application, move it through its stages (Applied, Interview, Rejected, Offer, Accepted Offer), get a reminder before interviews, and see how your search is going on an analytics page. It runs entirely in the browser, with no server or database.
 
 **[Live demo](https://zainab-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zainab-yekta/job-application-tracker)**
 
@@ -28,33 +28,91 @@ A React app for keeping track of job applications. You log each application, mov
 - Totals and the date range of your applications
 - Suggestions based on your numbers, for example a nudge to follow up when several applications are still waiting
 
-**Export**
+**Export and backup**
 
 - Download all applications as an Excel file or a PDF report, with formatted dates
+- Download a JSON backup and restore it later or in another browser. Restored files are validated before anything is saved
+
+**Accounts**
+
+- Register and log in, with the dashboard and analytics pages only reachable when logged in
+- Each account has its own list of applications
+- Passwords are stored as salted PBKDF2 hashes, never as plain text
+- Login stays active after a page refresh
 
 **Other**
 
-- Register and log in (a local demo, see the notes below), with the dashboard and analytics pages only reachable when logged in
-- Login stays active after a page refresh
 - Responsive layout with a collapsible menu on small screens
 - Labels for screen readers and keyboard access to the menu and chatbot
-- Help chatbot that answers questions about adding jobs, reminders, exports, analytics and where data is kept
+- Help chatbot that answers questions about adding jobs, reminders, exports, backups, analytics and where data is kept
+- A recovery page instead of a blank screen if something fails, and a not found page for unknown addresses
 
 ## Tech stack
 
-| Area    | Tools                                                    |
-| ------- | -------------------------------------------------------- |
-| UI      | React 19 with hooks                                      |
-| Routing | React Router 7 (HashRouter, so it works on GitHub Pages) |
-| Charts  | Recharts                                                 |
-| Export  | ExcelJS, jsPDF with jspdf-autotable, FileSaver           |
-| Storage | Browser localStorage                                     |
-| Build   | Vite                                                     |
-| Testing | Vitest, React Testing Library, jsdom                     |
-| Quality | ESLint, Prettier, GitHub Actions                         |
-| Hosting | GitHub Pages                                             |
+| Area     | Tools                                                    |
+| -------- | -------------------------------------------------------- |
+| UI       | React 19 with hooks                                      |
+| Routing  | React Router 7 (HashRouter, so it works on GitHub Pages) |
+| Charts   | Recharts                                                 |
+| Export   | ExcelJS, jsPDF with jspdf-autotable, FileSaver           |
+| Storage  | Browser localStorage behind a storage service            |
+| Security | Web Crypto API (PBKDF2 with SHA-256)                     |
+| Build    | Vite                                                     |
+| Testing  | Vitest, React Testing Library, jsdom                     |
+| Quality  | ESLint, Prettier, GitHub Actions                         |
+| Hosting  | GitHub Pages                                             |
 
-The Analytics page and the export libraries are loaded only when they're needed, so the first page load is about 245 kB (78 kB gzipped).
+The Analytics page and the export libraries are loaded only when they're needed, so the first page load is about 250 kB (81 kB gzipped).
+
+## How it works
+
+```
+ pages and components        what people see and click
+          │
+ hooks: useAuth, useJobs     app state (who is logged in, their jobs)
+          │
+ services/storage.js         the only code that reads or writes localStorage
+          │
+ localStorage                data in the visitor's browser
+```
+
+Pages never touch `localStorage` themselves. They get data from the `useAuth` and `useJobs` hooks, and the hooks go through `services/storage.js`. Moving the data to a real server later would mean rewriting that one file, not the pages.
+
+Logic that doesn't need React (filters, reminders, suggestions, validation, backups, date handling) lives in plain functions under `utils/`, which keeps it easy to test.
+
+## How data is stored
+
+Everything is kept in the visitor's browser under keys that start with `jobTracker.`:
+
+| Key                       | What it holds                                 |
+| ------------------------- | --------------------------------------------- |
+| `jobTracker.version`      | Version of the storage layout (currently `2`) |
+| `jobTracker.users`        | Accounts: email, salt and password hash       |
+| `jobTracker.session`      | Email of the account that is logged in        |
+| `jobTracker.jobs.<email>` | That account's applications                   |
+
+Each application looks like this:
+
+```json
+{
+  "id": 1717000000000,
+  "title": "Frontend Developer",
+  "company": "Shopify",
+  "location": "Toronto",
+  "status": "Interview",
+  "appliedDate": "2026-05-01",
+  "interviewDate": "2026-05-10",
+  "interviewTime": "14:30"
+}
+```
+
+Dates are stored as `YYYY-MM-DD` and read in the visitor's time zone, so a date never shifts by a day.
+
+The storage layout has a version number. On first load, data saved by the first version of the app (which used a single `user` and `jobs` key and a single `date` field) is moved into this layout automatically. An old plain text password is replaced with a hash the next time that person logs in.
+
+A backup file contains the same application objects plus the app name, layout version and export time. When a file is restored, every field is checked: unknown fields are dropped, statuses, dates and times must be valid, and duplicate ids get new ones.
+
+**Limits worth knowing:** the data exists only in the browser where it was entered, and clearing site data removes it (download a backup first). Accounts are a local demo. Hashing keeps passwords unreadable, but anyone using the same browser profile can still see or change the stored data, so this is not a replacement for real server side login.
 
 ## Run locally
 
@@ -89,7 +147,7 @@ The app opens at http://localhost:3000/job-application-tracker/.
 npm test
 ```
 
-The tests cover date parsing and formatting, interview reminders, search and filters, the analytics suggestions, migration of data saved by older versions, the chatbot replies, the job form, and the main flows in the app (redirecting logged out visitors, staying logged in, adding a job, logging in).
+There are 87 tests. They cover the storage service and its migration from the first version, password hashing, backup validation and restore, date parsing and formatting, interview reminders, search and filters, the analytics suggestions, the chatbot replies, the job form, the error page, and the main flows in the app: separate data per account, refusing a duplicate email, staying logged in after a reload, upgrading old passwords, and the not found page.
 
 ## Continuous integration and deployment
 
@@ -103,46 +161,45 @@ For the deploy workflow to publish, the repository's Pages source must be set to
 ## Project structure
 
 ```
-.github/workflows/      CI and deploy workflows
-public/                 favicon, icons and web manifest
+.github/workflows/        CI and deploy workflows
+public/                   favicon, icons and web manifest
 src/
   components/
-    Chatbot.jsx         help chatbot in the corner of every page
-    JobForm.jsx         add and edit form with validation
-    JobList.jsx         application cards
-    Navbar.jsx          top navigation with mobile menu
-    ProtectedRoute.jsx  sends logged out visitors to the login page
-    StatusPopup.jsx     message shown for offers
+    BackupControls.jsx    download and restore backups
+    Chatbot.jsx           help chatbot in the corner of every page
+    ErrorBoundary.jsx     recovery page when something fails
+    JobForm.jsx           add and edit form with validation
+    JobList.jsx           application cards
+    Navbar.jsx            top navigation with mobile menu
+    ProtectedRoute.jsx    sends logged out visitors to the login page
+    StatusPopup.jsx       message shown for offers
   constants/
-    statuses.js         the list of statuses, used everywhere
+    statuses.js           the list of statuses, used everywhere
   hooks/
-    useAuth.js          login state that survives a refresh
-    useJobs.js          the job list, saved to localStorage
+    useAuth.js            register, log in, log out, session
+    useJobs.js            the logged in account's applications
   pages/
     Home.jsx
-    Dashboard.jsx       tracker, search, filters, reminders, export
-    Analytics.jsx       charts, totals and suggestions
+    Dashboard.jsx         tracker, search, filters, reminders, export, backup
+    Analytics.jsx         charts, totals and suggestions
     About.jsx
     Login.jsx
     Register.jsx
-  utils/                date formatting, filters, reminders, suggestions,
-                        exports, validation, data migration, chatbot replies
-  test/setup.js         test setup
-  App.jsx               routes and offer popup
-  main.jsx              entry point
+    NotFound.jsx
+  services/
+    storage.js            all reads and writes to localStorage
+  utils/                  dates, filters, reminders, suggestions, exports,
+                          backups, validation, password hashing, migration,
+                          chatbot replies
+  test/setup.js           test setup
+  App.jsx                 routes, per-account workspace, error boundary
+  main.jsx                entry point
 index.html
 vite.config.js
 eslint.config.js
 ```
 
-Tests sit next to the file they test, for example `utils/filterJobs.test.js`.
-
-## Notes
-
-- There is no server. Applications and the login are saved in your browser's localStorage, so they stay after a refresh or restart but only on that browser. Clearing site data removes them.
-- The login is a front end demo. The account is stored in the browser and is not secure, so don't use a real password.
-- Dates are stored as `YYYY-MM-DD` and read in your local time zone.
-- Each job is saved as `{ id, title, company, location, status, appliedDate, interviewDate, interviewTime }`. Data saved by older versions of the app, which used a single `date` field, is converted when the app loads.
+Tests sit next to the file they test, for example `services/storage.test.js`.
 
 ## License
 
