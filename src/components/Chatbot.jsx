@@ -1,57 +1,66 @@
-// components/Chatbot.js
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { getBotReply, GREETING } from '../utils/chatbotReplies';
 import './Chatbot.css';
 
-const chatbotData = {
-  hello: 'Hi there! How can I assist you today?',
-  'how to use this app': 'Just login, add jobs, track status, and view analytics.',
-  'what is this app': 'This is a Job Application Tracker to manage your job search.',
-  thanks: "You're welcome! 😊",
-  bye: 'Goodbye! Have a great day!',
-};
-
 function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ sender: 'bot', text: GREETING }]);
   const [input, setInput] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const messagesEnd = useRef(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  // Keep the newest message in view
+  useEffect(() => {
+    messagesEnd.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [messages, isOpen]);
 
-    const userMessage = { sender: 'user', text: input };
-    const lowerInput = input.toLowerCase();
-    const botReply = chatbotData[lowerInput] || "Sorry, I don't understand that.";
+  const handleSend = (e) => {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text) return;
 
-    const botMessage = { sender: 'bot', text: botReply };
-
-    setMessages([...messages, userMessage, botMessage]);
+    setMessages((prev) => [
+      ...prev,
+      { sender: 'user', text },
+      { sender: 'bot', text: getBotReply(text) },
+    ]);
     setInput('');
   };
 
   return (
     <div className={`chatbot-container ${isOpen ? 'open' : ''}`}>
-      <div className="chatbot-header" onClick={() => setIsOpen(!isOpen)}>
+      <button
+        type="button"
+        className="chatbot-header"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls="chatbot-box"
+      >
         💬 Chat with Bot
-      </div>
+      </button>
       {isOpen && (
-        <div className="chatbot-box">
-          <div className="chatbot-messages">
+        <div className="chatbot-box" id="chatbot-box">
+          <div className="chatbot-messages" aria-live="polite">
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.sender}`}>
                 {msg.text}
               </div>
             ))}
+            <div ref={messagesEnd} />
           </div>
-          <div className="chatbot-input">
+          <form className="chatbot-input" onSubmit={handleSend}>
+            <label className="sr-only" htmlFor="chatbot-message">
+              Message
+            </label>
             <input
+              id="chatbot-message"
               type="text"
               placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              autoComplete="off"
             />
-            <button onClick={handleSend}>Send</button>
-          </div>
+            <button type="submit">Send</button>
+          </form>
         </div>
       )}
     </div>

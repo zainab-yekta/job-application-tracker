@@ -15,11 +15,17 @@ function Navbar({ isLoggedIn, onLogout }) {
         <Link to="/">JobTracker</Link>
       </div>
 
-      <button className="navbar-toggle" onClick={toggleMenu}>
+      <button
+        className="navbar-toggle"
+        onClick={toggleMenu}
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isOpen}
+        aria-controls="navbar-links"
+      >
         ☰
       </button>
 
-      <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
+      <ul id="navbar-links" className={`navbar-links ${isOpen ? 'active' : ''}`}>
         <li>
           <Link to="/" onClick={() => setIsOpen(false)}>
             Home

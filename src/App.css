@@ -397,6 +397,21 @@ button.delete:hover {
   font-size: 14px;
 }
 
+.auth-container .auth-error {
+  color: #dc3545;
+  margin: 0 0 1rem;
+}
+
+.auth-container .auth-success {
+  color: #0a6847;
+  margin: 0 0 1rem;
+}
+
+.auth-container .auth-note {
+  color: #777;
+  font-size: 12px;
+}
+
 .home-container {
   padding: 2rem;
   text-align: center;
