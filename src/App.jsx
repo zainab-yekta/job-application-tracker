@@ -15,7 +15,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { useJobs } from './hooks/useJobs';
 import { useAuth } from './hooks/useAuth';
 import { isOfferStatus } from './constants/statuses';
-import './App.css';
 
 // The chart library is large, so the Analytics page loads on first visit
 const Analytics = lazy(() => import('./pages/Analytics'));
