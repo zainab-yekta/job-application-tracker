@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
+import { migrateJob } from '../utils/migrateJob';
 
 const STORAGE_KEY = 'jobs';
 
 function loadJobs() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!Array.isArray(saved)) return [];
-    // Older versions saved an accepted job as 'Accepted'
-    return saved.map((job) => (job.status === 'Accepted' ? { ...job, status: 'Offer' } : job));
+    return Array.isArray(saved) ? saved.map(migrateJob) : [];
   } catch {
     return [];
   }

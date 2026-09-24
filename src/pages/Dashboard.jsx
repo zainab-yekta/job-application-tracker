@@ -1,12 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import JobList from '../components/JobList';
 import JobForm from '../components/JobForm';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
 import { formatDisplayDate } from '../utils/formatDate';
 import { getUpcomingInterviews } from '../utils/reminders';
+import { filterJobs } from '../utils/filterJobs';
+import { exportToExcel, exportToPDF } from '../utils/exportJobs';
 import { STATUSES } from '../constants/statuses';
 
 function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
@@ -15,12 +13,10 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [showNotification, setShowNotification] = useState(true);
+  const [exportError, setExportError] = useState('');
 
   const notificationJobs = useMemo(() => getUpcomingInterviews(jobs), [jobs]);
-
-  const editJob = (job) => {
-    setJobToEdit(job);
-  };
+  const filteredJobs = filterJobs(jobs, { status: filter, search: searchTerm, date: dateFilter });
 
   const handleSubmit = (job) => {
     if (jobToEdit) {
@@ -38,98 +34,27 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
     }
   };
 
-  //export Excel file
-  const handleExportExcel = async () => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Jobs');
-
-    worksheet.columns = [
-      { header: 'Title', key: 'title', width: 20 },
-      { header: 'Company', key: 'company', width: 20 },
-      { header: 'Status', key: 'status', width: 15 },
-      { header: 'Date', key: 'date', width: 15 },
-      { header: 'Time', key: 'time', width: 15 },
-    ];
-
-    jobs.forEach((job) => {
-      worksheet.addRow({
-        title: job.title,
-        company: job.company,
-        status: job.status,
-        date: job.date,
-        time: job.interviewTime,
-      });
-    });
-
-    const headerRow = worksheet.getRow(1);
-    headerRow.eachCell((cell) => {
-      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FF4F81BD' },
-      };
-      cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    });
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    const now = new Date();
-    const dateStr = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}.${now.getFullYear()}`;
-    const fileName = `JOBs ${dateStr}.xlsx`;
-
-    saveAs(new Blob([buffer]), fileName);
+  const handleExport = async (exporter) => {
+    setExportError('');
+    try {
+      await exporter(jobs);
+    } catch {
+      setExportError('The export could not be created. Please try again.');
+    }
   };
-
-  //Export pdf file
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-    doc.text('Job Application Report', 14, 10);
-
-    const tableColumn = ['Title', 'Company', 'Status', 'Date', 'Time'];
-    const tableRows = [];
-
-    jobs.forEach((job) => {
-      tableRows.push([job.title, job.company, job.status, job.date, job.interviewTime]);
-    });
-
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    });
-
-    const now = new Date();
-    const dateStr = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}.${now.getFullYear()}`;
-    doc.save(`JOBs ${dateStr}.pdf`);
-  };
-
-  const search = searchTerm.trim().toLowerCase();
-  const filteredJobs = jobs.filter((job) => {
-    const matchesStatus = filter === 'All' || job.status === filter;
-    const matchesSearch =
-      (job.title || '').toLowerCase().includes(search) ||
-      (job.company || '').toLowerCase().includes(search);
-    const matchesDate = !dateFilter || job.date === dateFilter;
-
-    return matchesStatus && matchesSearch && matchesDate;
-  });
 
   return (
     <div className="app-container">
       <h1>Job Application Tracker</h1>
 
-      {/* ✅ Notification Section */}
       {showNotification && notificationJobs.length > 0 && (
-        <div className="notification">
+        <div className="notification" role="status">
           <strong>Upcoming Interviews:</strong>
           <ul>
             {notificationJobs.map((job) => (
               <li key={job.id}>
-                {job.title} at {job.company} on {formatDisplayDate(job.date)}, {job.interviewTime}
+                {job.title} at {job.company} on {formatDisplayDate(job.interviewDate)},{' '}
+                {job.interviewTime}
               </li>
             ))}
           </ul>
@@ -140,8 +65,12 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
       )}
 
       <div className="search-bar">
+        <label className="sr-only" htmlFor="search">
+          Search by title or company
+        </label>
         <input
-          type="text"
+          id="search"
+          type="search"
           placeholder="Search by title or company"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -168,16 +97,26 @@ function Dashboard({ jobs, onAdd, onDelete, onUpdate }) {
       </div>
 
       <div className="date-filter">
-        <label>Filter by Date: </label>
-        <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
+        <label htmlFor="dateFilter">Filter by Date: </label>
+        <input
+          id="dateFilter"
+          type="date"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
+        />
       </div>
 
       <div className="export-buttons">
-        <button onClick={handleExportExcel}>Export to Excel</button>
-        <button onClick={handleExportPDF}>Export to PDF</button>
+        <button onClick={() => handleExport(exportToExcel)}>Export to Excel</button>
+        <button onClick={() => handleExport(exportToPDF)}>Export to PDF</button>
       </div>
+      {exportError && (
+        <p className="form-errors" role="alert">
+          {exportError}
+        </p>
+      )}
 
-      <JobList jobs={filteredJobs} onDelete={handleDelete} onEdit={editJob} />
+      <JobList jobs={filteredJobs} onDelete={handleDelete} onEdit={setJobToEdit} />
     </div>
   );
 }

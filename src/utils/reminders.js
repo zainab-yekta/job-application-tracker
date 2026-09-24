@@ -6,7 +6,7 @@ export function getUpcomingInterviews(jobs, now = new Date()) {
 
   return jobs.filter((job) => {
     if (job.status !== 'Interview') return false;
-    const interview = parseLocalDate(job.date, job.interviewTime);
+    const interview = parseLocalDate(job.interviewDate, job.interviewTime);
     return interview && interview >= now && interview < endOfTomorrow;
   });
 }

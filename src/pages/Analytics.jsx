@@ -38,7 +38,7 @@ function Analytics({ jobs }) {
 
   // 'YYYY-MM-DD' strings sort correctly as plain text
   const jobDates = jobs
-    .map((job) => job.date)
+    .map((job) => job.appliedDate)
     .filter(Boolean)
     .sort();
 
@@ -49,11 +49,12 @@ function Analytics({ jobs }) {
     setChartType((prev) => (prev === 'bar' ? 'pie' : 'bar'));
   };
 
-  // Interview trend data, grouped by day and kept in date order
+  // Every interview on record (including jobs that have since moved on),
+  // grouped by day and kept in date order
   const interviewCountsByDay = jobs
-    .filter((job) => job.status === 'Interview' && job.date)
+    .filter((job) => job.interviewDate)
     .reduce((acc, job) => {
-      acc[job.date] = (acc[job.date] || 0) + 1;
+      acc[job.interviewDate] = (acc[job.interviewDate] || 0) + 1;
       return acc;
     }, {});
 
