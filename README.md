@@ -6,19 +6,7 @@ A React app for keeping track of job applications. You log each application, mov
 
 **[Live demo](https://zainab-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zainab-yekta/job-application-tracker)**
 
-![A walkthrough of the app: logging in, searching, adding an application with an interview, editing it to an offer, the analytics charts and the dark theme](docs/preview.gif)
-
-## Screenshots
-
-![Home page with a headline, sign up button and a preview of the tracker](docs/screenshots/home.png)
-
-![Tracker with summary numbers, search and filters, application cards and the add application form](docs/screenshots/dashboard.png)
-
-![Analytics with summary cards, applications by status and a running total of interviews](docs/screenshots/analytics.png)
-
-| Dark theme                                                        | On a phone                                                                               |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![Tracker in the dark theme](docs/screenshots/dashboard-dark.png) | <img src="docs/screenshots/dashboard-mobile.png" alt="Tracker on a phone" width="260" /> |
+![A walkthrough of the app: logging in, searching, adding an application with an interview, editing it to an offer, the analytics charts and the dark theme](mockup/preview.gif)
 
 ## Features
 
@@ -188,7 +176,7 @@ For the deploy workflow to publish, the repository's Pages source must be set to
 
 ```
 .github/workflows/        CI and deploy workflows
-docs/screenshots/         images used in this README
+mockup/                   animated preview used in this README
 public/                   favicon, icons and web manifest
 src/
   components/
