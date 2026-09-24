@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import About from './pages/About';
 import ProtectedRoute from './components/ProtectedRoute';
 import Chatbot from './components/Chatbot';
+import './App.css';
 
 function App() {
   const [jobs, setJobs] = useState(() => {
