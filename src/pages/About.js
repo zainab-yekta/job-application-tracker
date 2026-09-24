@@ -10,10 +10,16 @@ function About() {
         Stay organized with features like interview reminders, application analytics, growth trends, and more.
       </p>
 
-      <h2>Contact Us</h2>
       <p>
-        📞 <strong>Phone:</strong> +123-456-7890 <br />
-        📧 <strong>Email:</strong> support@jobtracker.com
+        Your data stays in your own browser. Nothing is sent to a server.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Built by Zeinab Ramezani Yekta <br />
+        <a href="https://github.com/zainab-yekta" target="_blank" rel="noopener noreferrer">GitHub</a>
+        {' · '}
+        <a href="https://linkedin.com/in/zeinab-ramezani" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </p>
     </div>
   );
