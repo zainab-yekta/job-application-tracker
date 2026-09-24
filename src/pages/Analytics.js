@@ -14,13 +14,44 @@ import { formatDisplayDate } from '../utils/FormatDate';
 
 const COLORS = ['#8884d8', '#82ca9d', '#ff6b6b']; // Custom colors for Pie Chart
 
+const isOffer = (job) => job.status === 'Offer' || job.status === 'Accepted Offer';
+
+export function getSuggestions({ totalApplied, appliedCount, interviewCount, rejectedCount, offerCount }) {
+  const suggestions = [];
+
+  if (totalApplied >= 5 && interviewCount === 0 && offerCount === 0 && rejectedCount === 0) {
+    suggestions.push("You've applied to many jobs but haven't received responses. Consider reviewing your resume or matching job requirements better.");
+  } else if (interviewCount === 0 && totalApplied > 3) {
+    suggestions.push("You haven't received any interviews. Try tailoring your cover letter or applying to different job roles.");
+  }
+
+  if (appliedCount >= 4) {
+    suggestions.push("Several jobs are still marked as 'Applied'. Consider following up to show continued interest.");
+  }
+
+  if (interviewCount >= 3 && offerCount === 0) {
+    suggestions.push("You're getting interviews but no offers yet. You may want to improve your interview skills or assess company fit.");
+  }
+
+  if (totalApplied > 0 && rejectedCount / totalApplied > 0.5) {
+    suggestions.push('You have a high rejection rate. Consider improving your CV or revising your job search focus.');
+  }
+
+  if (offerCount > 0 && interviewCount > 0) {
+    suggestions.push("You're doing great! Keep up the good work and continue following up on your applications.");
+  }
+
+  return suggestions;
+}
+
 function Analytics({ jobs }) {
   const [chartType, setChartType] = useState('bar'); // toggle state
 
   const totalApplied = jobs.length;
+  const appliedCount = jobs.filter(job => job.status === 'Applied').length;
   const interviewCount = jobs.filter(job => job.status === 'Interview').length;
   const rejectedCount = jobs.filter(job => job.status === 'Rejected').length;
-  const offerCount = jobs.filter(job => job.status === 'Offer').length;
+  const offerCount = jobs.filter(isOffer).length;
 
   const data = [
     { name: 'Interviews', value: interviewCount },
@@ -28,54 +59,33 @@ function Analytics({ jobs }) {
     { name: 'Offers', value: offerCount },
   ];
 
-  console.log('Analytics chart data:', data);
+  // 'YYYY-MM-DD' strings sort correctly as plain text
   const jobDates = jobs
-  .filter(job => job.date) // filter out jobs with missing dates
-  .map(job => new Date(job.date))
-  .sort((a, b) => a - b);
+    .map(job => job.date)
+    .filter(Boolean)
+    .sort();
 
-  const earliestDate = jobDates.length ? formatDisplayDate(jobDates[0].toISOString()) : 'N/A';
-  const latestDate = jobDates.length ? formatDisplayDate(jobDates[jobDates.length - 1].toISOString()) : 'N/A';
+  const earliestDate = jobDates.length ? formatDisplayDate(jobDates[0]) : 'N/A';
+  const latestDate = jobDates.length ? formatDisplayDate(jobDates[jobDates.length - 1]) : 'N/A';
 
   const toggleChart = () => {
     setChartType(prev => (prev === 'bar' ? 'pie' : 'bar'));
   };
 
-  // Interview trend data
-  const interviewJobs = jobs.filter(job => job.status === 'Interview' && job.date);
+  // Interview trend data, grouped by day and kept in date order
+  const interviewCountsByDay = jobs
+    .filter(job => job.status === 'Interview' && job.date)
+    .reduce((acc, job) => {
+      acc[job.date] = (acc[job.date] || 0) + 1;
+      return acc;
+    }, {});
 
-  const interviewTrendData = interviewJobs.reduce((acc, job) => {
-  const date = formatDisplayDate(job.date);
-  const existing = acc.find(item => item.date === date);
-  if (existing) {
-    existing.count += 1;
-  } else {
-    acc.push({ date, count: 1 });
-  }
-  return acc;
-  }, []);
+  const interviewTrendData = Object.keys(interviewCountsByDay)
+    .sort()
+    .map(day => ({ date: formatDisplayDate(day), count: interviewCountsByDay[day] }));
 
-    // Smart suggestions
-  let suggestion = '';
-  if (totalApplied >= 5 && interviewCount === 0 && offerCount === 0 && rejectedCount === 0) {
-    suggestion.push("You've applied to many jobs but haven’t received responses. Consider reviewing your resume or matching job requirements better.");
-  }
+  const suggestions = getSuggestions({ totalApplied, appliedCount, interviewCount, rejectedCount, offerCount });
 
-  if (jobs.filter(job => job.status === 'Applied').length >= 4) {
-    suggestion.push("Several jobs are still marked as 'Applied'. Consider following up to show continued interest.");
-  }
-
-  if (interviewCount >= 3 && offerCount === 0) {
-    suggestion.push("You're getting interviews but no offers yet. You may want to improve your interview skills or assess company fit.");
-  }
-
-  if (rejectedCount / totalApplied > 0.5) {
-    suggestion = 'You have a high rejection rate. Consider improving your CV or revising your job search focus.';
-  } else if (interviewCount === 0 && totalApplied > 3) {
-    suggestion = 'You haven\'t received any interviews. Try tailoring your cover letter or applying to different job roles.';
-  } else if (offerCount > 0 && interviewCount > 0) {
-    suggestion = 'You\'re doing great! Keep up the good work and continue following up on your applications.';
-  }
   return (
     <div style={{ padding: '20px' }}>
       <div className="analytics-section">
@@ -93,7 +103,8 @@ function Analytics({ jobs }) {
               <XAxis dataKey="name" />
               <YAxis
                 tickFormatter={(value) => (value === 0 || value === totalApplied ? value : '')}
-                domain={[0, totalApplied]}
+                domain={[0, Math.max(totalApplied, 1)]}
+                allowDecimals={false}
               >
                 <Label
                   value="Total Applied"
@@ -149,10 +160,14 @@ function Analytics({ jobs }) {
           <p>No interview data available to show growth trend.</p>
         )}
       </div>
-      {suggestion && (
+      {suggestions.length > 0 && (
         <div style={{ marginTop: '30px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f5f5f5' }}>
-          <h3>🧠 Smart Suggestion</h3>
-          <p>{suggestion}</p>
+          <h3>🧠 Smart Suggestions</h3>
+          <ul>
+            {suggestions.map((text) => (
+              <li key={text}>{text}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
