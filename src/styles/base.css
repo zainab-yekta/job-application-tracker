@@ -364,3 +364,14 @@ textarea {
     scroll-behavior: auto !important;
   }
 }
+
+/* Page layout: navigation, page content, footer at the bottom */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+}

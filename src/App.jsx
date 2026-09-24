@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Chatbot from './components/Chatbot';
+import Footer from './components/Footer';
 import StatusPopup from './components/StatusPopup';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useJobs } from './hooks/useJobs';
@@ -64,7 +65,7 @@ function Workspace({ auth }) {
       )}
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLoggedIn={auth.isLoggedIn} />} />
         <Route path="/about" element={<About />} />
         <Route
           path="/login"
@@ -116,10 +117,15 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLoggedIn={auth.isLoggedIn} onLogout={auth.logout} />
-      <PageErrorBoundary>
-        <Workspace key={auth.user ?? 'guest'} auth={auth} />
-      </PageErrorBoundary>
+      <div className="app-shell">
+        <Navbar isLoggedIn={auth.isLoggedIn} onLogout={auth.logout} />
+        <div className="app-main">
+          <PageErrorBoundary>
+            <Workspace key={auth.user ?? 'guest'} auth={auth} />
+          </PageErrorBoundary>
+        </div>
+        <Footer />
+      </div>
       <Chatbot />
     </Router>
   );

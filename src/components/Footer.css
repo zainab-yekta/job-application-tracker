@@ -1,0 +1,28 @@
+.footer {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+  /* Leave room for the round chatbot button in the corner */
+  padding-right: 88px;
+}
+
+.footer a {
+  color: var(--color-fg-muted);
+  font-weight: 600;
+}
+
+.footer a:hover {
+  color: var(--color-primary);
+}
