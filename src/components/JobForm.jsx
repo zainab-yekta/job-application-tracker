@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, Save } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Pencil, Plus, Save } from 'lucide-react';
 import { STATUSES } from '../constants/statuses';
 import { validateJob } from '../utils/validateJob';
 import './JobForm.css';
@@ -49,6 +49,13 @@ function Field({ id, label, required, error, children }) {
 function JobForm({ jobToEdit, onSubmit, onCancel }) {
   const [form, setForm] = useState(() => toFormValues(jobToEdit));
   const [errors, setErrors] = useState({});
+  const titleRef = useRef(null);
+
+  // When editing starts, put the cursor in the first field. The dashboard
+  // scrolls the whole form into view, so focusing must not scroll by itself.
+  useEffect(() => {
+    if (jobToEdit) titleRef.current?.focus({ preventScroll: true });
+  }, [jobToEdit]);
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -95,13 +102,22 @@ function JobForm({ jobToEdit, onSubmit, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="job-form" noValidate>
+      {jobToEdit && (
+        <p className="editing-note">
+          <Pencil size={16} aria-hidden="true" />
+          <span>
+            Editing <strong>{jobToEdit.title || 'Untitled application'}</strong>
+            {jobToEdit.company ? ` at ${jobToEdit.company}` : ''}
+          </span>
+        </p>
+      )}
       <Field id="job-title" label="Job title" required error={errors.title}>
         <input
           {...inputProps('title')}
           type="text"
           placeholder="e.g. Frontend Developer"
           aria-required="true"
-          autoFocus={Boolean(jobToEdit)}
+          ref={titleRef}
         />
       </Field>
 

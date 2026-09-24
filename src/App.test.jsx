@@ -93,6 +93,30 @@ describe('App', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('already exists');
   });
 
+  it('edits an application from its card', async () => {
+    const user = userEvent.setup();
+    openAt('#/');
+    await register(user, 'edit@example.com', 'secret1');
+    await login(user, 'secret1');
+    await addJob(user, 'Frontend Developer');
+
+    await user.click(screen.getByRole('button', { name: 'Edit' }));
+
+    expect(screen.getByRole('heading', { name: 'Edit application' })).toBeInTheDocument();
+    expect(screen.getByText('Frontend Developer', { selector: 'strong' })).toBeInTheDocument();
+    const title = screen.getByLabelText('Job title');
+    expect(title).toHaveValue('Frontend Developer');
+    expect(title).toHaveFocus();
+
+    await user.clear(title);
+    await user.type(title, 'Senior Frontend Developer');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(screen.getByRole('heading', { name: 'Add application' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Senior Frontend Developer' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Frontend Developer' })).not.toBeInTheDocument();
+  });
+
   it('keeps the session after a reload', async () => {
     const user = userEvent.setup();
     const { unmount } = openAt('#/');

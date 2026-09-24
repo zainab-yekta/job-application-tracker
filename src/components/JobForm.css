@@ -25,3 +25,21 @@
 .job-form-actions .btn-primary {
   flex: 1;
 }
+
+/* Shown at the top of the form while a job is being edited */
+.editing-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-soft);
+  color: var(--color-fg);
+  font-size: var(--text-sm);
+}
+
+.editing-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-primary);
+}

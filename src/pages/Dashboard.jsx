@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle,
   Briefcase,
@@ -23,10 +23,13 @@ import { getUpcomingInterviews } from '../utils/reminders';
 import { filterJobs } from '../utils/filterJobs';
 import { exportToExcel, exportToPDF } from '../utils/exportJobs';
 import { STATUSES, isOfferStatus } from '../constants/statuses';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import './Dashboard.css';
 
 function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
   const [jobToEdit, setJobToEdit] = useState(null);
+  const formPanelRef = useRef(null);
+  const reduceMotion = usePrefersReducedMotion();
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
@@ -49,6 +52,20 @@ function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
     setSearchTerm('');
     setDateFilter('');
   };
+
+  // When editing starts, bring the form into view if its heading is not visible
+  // (on phones the form sits above the list, so it is usually off screen)
+  const editingId = jobToEdit?.id;
+  useEffect(() => {
+    if (editingId === undefined) return;
+    const panel = formPanelRef.current;
+    if (!panel) return;
+    const navbarHeight = document.querySelector('.navbar')?.offsetHeight ?? 0;
+    const { top } = panel.getBoundingClientRect();
+    if (top < navbarHeight || top > window.innerHeight - 120) {
+      panel.scrollIntoView?.({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+  }, [editingId, reduceMotion]);
 
   const handleSubmit = (job) => {
     if (jobToEdit) {
@@ -142,7 +159,11 @@ function Dashboard({ jobs, saveFailed, onAdd, onDelete, onUpdate, onImport }) {
       </section>
 
       <div className="dashboard-layout">
-        <section className="panel card dashboard-form" aria-labelledby="form-title">
+        <section
+          ref={formPanelRef}
+          className="panel card dashboard-form"
+          aria-labelledby="form-title"
+        >
           <h2 id="form-title" className="panel-title">
             {jobToEdit ? 'Edit application' : 'Add application'}
           </h2>
