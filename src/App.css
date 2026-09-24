@@ -1,29 +1,13 @@
 /* Styles for pages that have not moved to the design system yet. Global
    element rules are scoped to those pages so they do not leak into new ones. */
-:where(
-    .app-container,
-    .auth-container,
-    .about-page,
-    .analytics-page,
-    .status-page,
-    .congrats-popup2
-  )
-  h1 {
+:where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2) h1 {
   text-align: center;
   padding-top: 1rem;
   margin-top: 20px;
   color: #333;
 }
 
-:where(
-    .app-container,
-    .auth-container,
-    .about-page,
-    .analytics-page,
-    .status-page,
-    .congrats-popup2
-  )
-  form {
+:where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2) form {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -33,14 +17,7 @@
   max-width: 500px;
 }
 
-:where(
-    .app-container,
-    .auth-container,
-    .about-page,
-    .analytics-page,
-    .status-page,
-    .congrats-popup2
-  )
+:where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2)
   :is(input, select, button) {
   padding: 0.6rem;
   border-radius: 6px;
@@ -166,15 +143,7 @@ input[aria-invalid='true'] {
   margin-top: 0.5rem;
 }
 
-:where(
-    .app-container,
-    .auth-container,
-    .about-page,
-    .analytics-page,
-    .status-page,
-    .congrats-popup2
-  )
-  button {
+:where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2) button {
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   border: none;
@@ -184,15 +153,7 @@ input[aria-invalid='true'] {
   transition: background-color 0.2s;
 }
 
-:where(
-    .app-container,
-    .auth-container,
-    .about-page,
-    .analytics-page,
-    .status-page,
-    .congrats-popup2
-  )
-  button:hover {
+:where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2) button:hover {
   background-color: #0056b3;
 }
 
@@ -250,15 +211,7 @@ button.delete:hover {
 
 /* Responsive Layout */
 @media (max-width: 600px) {
-  :where(
-      .app-container,
-      .auth-container,
-      .about-page,
-      .analytics-page,
-      .status-page,
-      .congrats-popup2
-    )
-    form {
+  :where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2) form {
     flex-direction: column;
     align-items: center;
   }
@@ -268,14 +221,7 @@ button.delete:hover {
     align-items: center;
   }
 
-  :where(
-      .app-container,
-      .auth-container,
-      .about-page,
-      .analytics-page,
-      .status-page,
-      .congrats-popup2
-    )
+  :where(.app-container, .about-page, .analytics-page, .status-page, .congrats-popup2)
     :is(input, select, button) {
     width: 90%;
   }
@@ -385,71 +331,6 @@ button.delete:hover {
   border-bottom: 2px solid #eee;
   padding-bottom: 10px;
   font-size: 1.2rem;
-}
-
-.auth-container {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.auth-container h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-
-.auth-container form {
-  display: flex;
-  flex-direction: column;
-}
-
-.auth-container input {
-  padding: 10px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.auth-container button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.auth-container button:hover {
-  background-color: #0056b3;
-}
-
-.auth-container p {
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 14px;
-}
-
-.auth-container .auth-error {
-  color: #dc3545;
-  margin: 0 0 1rem;
-}
-
-.auth-container .auth-success {
-  color: #0a6847;
-  margin: 0 0 1rem;
-}
-
-.auth-container .auth-note {
-  color: #777;
-  font-size: 12px;
 }
 
 .app-container {

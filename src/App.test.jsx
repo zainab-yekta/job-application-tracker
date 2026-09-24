@@ -14,14 +14,14 @@ const register = async (user, email, password) => {
   await user.type(screen.getByLabelText('Email'), email);
   await user.type(screen.getByLabelText('Password'), password);
   await user.type(screen.getByLabelText('Confirm password'), password);
-  await user.click(screen.getByRole('button', { name: 'Register' }));
+  await user.click(screen.getByRole('button', { name: 'Create account' }));
   await screen.findByText('Account created. You can log in now.');
 };
 
 const login = async (user, password) => {
   // The email is filled in after registering
   await user.type(screen.getByLabelText('Password'), password);
-  await user.click(screen.getByRole('button', { name: 'Login' }));
+  await user.click(screen.getByRole('button', { name: 'Log in' }));
   await screen.findByRole('heading', { name: 'Job Application Tracker' });
 };
 
@@ -45,7 +45,7 @@ describe('App', () => {
 
   it('sends logged out visitors from the dashboard to the login page', async () => {
     openAt('#/dashboard');
-    expect(await screen.findByRole('heading', { name: 'Login' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Welcome back' })).toBeInTheDocument();
   });
 
   it('keeps each account’s jobs separate', async () => {
@@ -73,7 +73,7 @@ describe('App', () => {
     await user.type(screen.getByLabelText('Email'), 'ME@example.com');
     await user.type(screen.getByLabelText('Password'), 'another1');
     await user.type(screen.getByLabelText('Confirm password'), 'another1');
-    await user.click(screen.getByRole('button', { name: 'Register' }));
+    await user.click(screen.getByRole('button', { name: 'Create account' }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent('already exists');
   });
@@ -97,7 +97,7 @@ describe('App', () => {
 
     await user.type(screen.getByLabelText('Email'), 'old@example.com');
     await user.type(screen.getByLabelText('Password'), 'oldpass');
-    await user.click(screen.getByRole('button', { name: 'Login' }));
+    await user.click(screen.getByRole('button', { name: 'Log in' }));
     await screen.findByRole('heading', { name: 'Job Application Tracker' });
 
     const account = JSON.parse(localStorage.getItem('jobTracker.users'))['old@example.com'];

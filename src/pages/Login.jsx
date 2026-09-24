@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AlertCircle, Briefcase, CheckCircle2, Loader2 } from 'lucide-react';
+import PasswordInput from '../components/PasswordInput';
+import './Auth.css';
 
 function Login({ onLogin }) {
   const location = useLocation();
@@ -24,51 +27,68 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login</h2>
-      {justRegistered && !error && (
-        <p className="auth-success" role="status">
-          Account created. You can log in now.
+    <main className="auth-page">
+      <div className="auth-card card">
+        <span className="auth-logo" aria-hidden="true">
+          <Briefcase size={22} />
+        </span>
+        <h1>Welcome back</h1>
+        <p className="auth-subtitle">Log in to see your applications.</p>
+
+        <form className="auth-form" onSubmit={handleLogin}>
+          {justRegistered && !error && (
+            <p className="alert alert-success" role="status">
+              <CheckCircle2 size={18} aria-hidden="true" />
+              Account created. You can log in now.
+            </p>
+          )}
+          {error && (
+            <p className="alert alert-error" role="alert">
+              <AlertCircle size={18} aria-hidden="true" />
+              {error}
+            </p>
+          )}
+
+          <div className="field">
+            <label className="field-label" htmlFor="login-email">
+              Email
+            </label>
+            <input
+              id="login-email"
+              className="input"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div className="field">
+            <label className="field-label" htmlFor="login-password">
+              Password
+            </label>
+            <PasswordInput
+              id="login-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={submitting}>
+            {submitting && <Loader2 size={18} className="spin" aria-hidden="true" />}
+            {submitting ? 'Logging in…' : 'Log in'}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Don&apos;t have an account? <Link to="/register">Sign up</Link>
         </p>
-      )}
-      <form onSubmit={handleLogin}>
-        <label className="sr-only" htmlFor="login-email">
-          Email
-        </label>
-        <input
-          id="login-email"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
-          required
-        />
-        <label className="sr-only" htmlFor="login-password">
-          Password
-        </label>
-        <input
-          id="login-password"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
-        {error && (
-          <p className="auth-error" role="alert">
-            {error}
-          </p>
-        )}
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Logging in…' : 'Login'}
-        </button>
-      </form>
-      <p>
-        Don&apos;t have an account? <Link to="/register">Register</Link>
-      </p>
-    </div>
+      </div>
+    </main>
   );
 }
 
