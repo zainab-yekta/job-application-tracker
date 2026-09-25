@@ -88,7 +88,7 @@ function About() {
         <div className="contact-links">
           <a
             className="btn btn-secondary"
-            href="https://github.com/zainab-yekta"
+            href="https://github.com/zeinab-r-yekta"
             target="_blank"
             rel="noopener noreferrer"
           >

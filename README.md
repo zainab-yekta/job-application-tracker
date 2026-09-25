@@ -1,10 +1,10 @@
 # Job Application Tracker
 
-[![CI](https://github.com/zainab-yekta/job-application-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/zainab-yekta/job-application-tracker/actions/workflows/ci.yml)
+[![CI](https://github.com/zeinab-r-yekta/job-application-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/zeinab-r-yekta/job-application-tracker/actions/workflows/ci.yml)
 
 A React app for keeping track of job applications. You log each application, move it through its stages (Applied, Interview, Rejected, Offer, Accepted Offer), get a reminder before interviews, and see how your search is going on an analytics page. It runs entirely in the browser, with no server or database.
 
-**[Live demo](https://zainab-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zainab-yekta/job-application-tracker)**
+**[Live demo](https://zeinab-r-yekta.github.io/job-application-tracker/)** · **[Source code](https://github.com/zeinab-r-yekta/job-application-tracker)**
 
 ![A walkthrough of the app: logging in, searching, adding an application with an interview, editing it to an offer, the analytics charts and the dark theme](mockup/preview.gif)
 
@@ -133,7 +133,7 @@ A backup file contains the same application objects plus the app name, layout ve
 You need Node.js 20.19 or newer.
 
 ```bash
-git clone https://github.com/zainab-yekta/job-application-tracker.git
+git clone https://github.com/zeinab-r-yekta/job-application-tracker.git
 cd job-application-tracker
 npm install
 npm run dev
@@ -232,4 +232,4 @@ MIT, see [LICENSE](LICENSE).
 ## Author
 
 Built by **Zeinab Ramezani Yekta**
-[LinkedIn](https://linkedin.com/in/zeinab-ramezani) · [GitHub](https://github.com/zainab-yekta)
+[LinkedIn](https://linkedin.com/in/zeinab-ramezani) · [GitHub](https://github.com/zeinab-r-yekta)

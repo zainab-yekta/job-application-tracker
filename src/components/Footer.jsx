@@ -7,7 +7,7 @@ function Footer() {
       <div className="container footer-inner">
         <p>
           Built by Zeinab Ramezani Yekta ·{' '}
-          <a href="https://github.com/zainab-yekta" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/zeinab-r-yekta" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>{' '}
           ·{' '}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://zainab-yekta.github.io/job-application-tracker",
+  "homepage": "https://zeinab-r-yekta.github.io/job-application-tracker",
   "engines": {
     "node": ">=20.19"
   },
